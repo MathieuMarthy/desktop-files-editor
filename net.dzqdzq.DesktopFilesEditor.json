@@ -5,11 +5,14 @@
     "sdk" : "org.gnome.Sdk",
     "command" : "desktop-files-editor",
     "finish-args" : [
-        "--share=network",
         "--share=ipc",
         "--socket=fallback-x11",
         "--device=dri",
-        "--socket=wayland"
+        "--socket=wayland",
+        "--filesystem=xdg-data/applications:ro",
+	"--filesystem=host-os:ro",
+	"--filesystem=/var/lib/flatpak/exports/share/applications:ro",
+	"--filesystem=xdg-data/flatpak/exports/share/applications:ro"
     ],
     "cleanup" : [
         "/include",
@@ -23,14 +26,26 @@
         "*.a"
     ],
     "modules" : [
+		{
+			"name" : "blueprint-compiler",
+			"buildsystem" : "meson",
+			"cleanup" : ["*"],
+			"sources" : [
+		        {
+		            "type" : "git",
+		            "url" : "https://gitlab.gnome.org/GNOME/blueprint-compiler",
+		            "tag" : "v0.22.2"
+		        }
+		    ]
+		},
         {
             "name" : "desktop-files-editor",
             "builddir" : true,
             "buildsystem" : "meson",
             "sources" : [
                 {
-                    "type" : "git",
-                    "url" : "file:///home/mathieu/code"
+                    "type" : "dir",
+                    "path" : "."
                 }
             ]
         }
