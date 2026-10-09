@@ -17,12 +17,12 @@
 #
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-from gi.repository import Adw
-from gi.repository import Gtk
+from gi.repository import Adw, Gtk
 
-@Gtk.Template(resource_path='/net/dzqdzq/DesktopFilesEditor/window.ui')
+
+@Gtk.Template(resource_path="/net/dzqdzq/DesktopFilesEditor/window.ui")
 class DesktopFilesEditorWindow(Adw.ApplicationWindow):
-    __gtype_name__ = 'DesktopFilesEditorWindow'
+    __gtype_name__ = "DesktopFilesEditorWindow"
 
     label = Gtk.Template.Child()
 

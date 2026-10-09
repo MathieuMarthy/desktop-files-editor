@@ -18,27 +18,30 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 import sys
-import gi
-
 from gettext import gettext as _
 
-gi.require_version('Gtk', '4.0')
-gi.require_version('Adw', '1')
+import gi
+from gi.repository import Adw, Gio
 
-from gi.repository import Gtk, Gio, Adw
-from .window import DesktopFilesEditorWindow
+gi.require_version("Gtk", "4.0")
+gi.require_version("Adw", "1")
+
+
+from .window import DesktopFilesEditorWindow  # noqa: E402
 
 
 class DesktopFilesEditorApplication(Adw.Application):
     """The main application singleton class."""
 
     def __init__(self):
-        super().__init__(application_id='net.dzqdzq.DesktopFilesEditor',
-                         flags=Gio.ApplicationFlags.DEFAULT_FLAGS,
-                         resource_base_path='/net/dzqdzq/DesktopFilesEditor')
-        self.create_action('quit', lambda *_: self.quit(), ['<control>q'])
-        self.create_action('about', self.on_about_action)
-        self.create_action('preferences', self.on_preferences_action)
+        super().__init__(
+            application_id="net.dzqdzq.DesktopFilesEditor",
+            flags=Gio.ApplicationFlags.DEFAULT_FLAGS,
+            resource_base_path="/net/dzqdzq/DesktopFilesEditor",
+        )
+        self.create_action("quit", lambda *_: self.quit(), ["<control>q"])
+        self.create_action("about", self.on_about_action)
+        self.create_action("preferences", self.on_preferences_action)
 
     def do_activate(self):
         """Called when the application is activated.
@@ -53,19 +56,22 @@ class DesktopFilesEditorApplication(Adw.Application):
 
     def on_about_action(self, *args):
         """Callback for the app.about action."""
-        about = Adw.AboutDialog(application_name='Desktop-files-editor',
-                                application_icon='net.dzqdzq.DesktopFilesEditor',
-                                developer_name='mathieu',
-                                version='0.1.0',
-                                # Translators: Replace "translator-credits" with your name/username, and optionally an email or URL.
-                                translator_credits = _('translator-credits'),
-                                developers=['mathieu'],
-                                copyright='© 2026 mathieu')
+        about = Adw.AboutDialog(
+            application_name="Desktop-files-editor",
+            application_icon="net.dzqdzq.DesktopFilesEditor",
+            developer_name="mathieu",
+            version="0.1.0",
+            # Translators: Replace "translator-credits" with your name/username,
+            # and optionally an email or URL.
+            translator_credits=_("translator-credits"),
+            developers=["mathieu"],
+            copyright="© 2026 mathieu",
+        )
         about.present(self.props.active_window)
 
     def on_preferences_action(self, widget, _):
         """Callback for the app.preferences action."""
-        print('app.preferences action activated')
+        print("app.preferences action activated")
 
     def create_action(self, name, callback, shortcuts=None):
         """Add an application action.
