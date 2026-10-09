@@ -1,0 +1,3 @@
+[D-BUS Service]
+Name=net.dzqdzq.DesktopFilesEditor
+Exec=@bindir@/desktop-files-editor --gapplication-service

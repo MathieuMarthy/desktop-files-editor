@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=Desktop-files-editor
+Exec=desktop-files-editor
+Icon=net.dzqdzq.DesktopFilesEditor
+Terminal=false
+Type=Application
+Categories=Utility;
+Keywords=GTK;
+StartupNotify=true
+DBusActivatable=true

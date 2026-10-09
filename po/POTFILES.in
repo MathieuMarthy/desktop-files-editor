@@ -1,0 +1,8 @@
+# List of source files containing translatable strings.
+# Please keep this file sorted alphabetically.
+data/net.dzqdzq.DesktopFilesEditor.desktop.in
+data/net.dzqdzq.DesktopFilesEditor.metainfo.xml.in
+data/net.dzqdzq.DesktopFilesEditor.gschema.xml
+src/main.py
+src/window.py
+src/window.ui
