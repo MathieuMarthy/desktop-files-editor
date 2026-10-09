@@ -3,6 +3,7 @@
 
 ### Flatpak ###
 .flatpak-builder
+.flatpak
 build
 build-dir
 repo
@@ -203,3 +204,6 @@ poetry.toml
 pyrightconfig.json
 
 # End of https://www.toptal.com/developers/gitignore/api/flatpak,meson,python
+
+.vscode/*
+!.vscode/extensions.json

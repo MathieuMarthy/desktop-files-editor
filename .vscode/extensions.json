@@ -1,0 +1,10 @@
+{
+    "recommendations": [
+        "bilelmoussaoui.flatpak-vscode",
+        "bodil.blueprint-gtk",
+        "mesonbuild.mesonbuild",
+        "charliermarsh.ruff",
+        "ms-python.python",
+        "mrorz.language-gettext"
+    ]
+}
