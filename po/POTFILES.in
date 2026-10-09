@@ -1,9 +1,9 @@
 # List of source files containing translatable strings.
 # Please keep this file sorted alphabetically.
 data/net.dzqdzq.DesktopFilesEditor.desktop.in
-data/net.dzqdzq.DesktopFilesEditor.metainfo.xml.in
 data/net.dzqdzq.DesktopFilesEditor.gschema.xml
+data/net.dzqdzq.DesktopFilesEditor.metainfo.xml.in
 src/main.py
 src/shortcuts-dialog.blp
-src/window.py
 src/window.blp
+src/window.py

@@ -1,0 +1,85 @@
+# French translations for desktop-files-editor package.
+# Copyright (C) 2026 THE desktop-files-editor'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the desktop-files-editor package.
+# Automatically generated, 2026.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: desktop-files-editor\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-10-09 14:27-0400\n"
+"PO-Revision-Date: 2026-10-09 10:42-0400\n"
+"Last-Translator: Automatically generated\n"
+"Language-Team: none\n"
+"Language: fr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#: data/net.dzqdzq.DesktopFilesEditor.desktop.in:2
+#: data/net.dzqdzq.DesktopFilesEditor.metainfo.xml.in:7
+msgid "Desktop Files Editor"
+msgstr ""
+
+#: data/net.dzqdzq.DesktopFilesEditor.desktop.in:8
+msgid "Desktop;Files;Editor;"
+msgstr ""
+
+#: data/net.dzqdzq.DesktopFilesEditor.metainfo.xml.in:8
+msgid "Manage your .desktop files"
+msgstr ""
+
+#: data/net.dzqdzq.DesktopFilesEditor.metainfo.xml.in:10
+msgid ""
+"With Desktop Files Editor you can see, edit, add or remove your .desktop "
+"files."
+msgstr ""
+
+#: data/net.dzqdzq.DesktopFilesEditor.metainfo.xml.in:14
+msgid "Mathieu Marthy"
+msgstr ""
+
+#. Translators: Replace "translator-credits" with your name/username,
+#. and optionally an email or URL.
+#: src/main.py:66
+msgid "translator-credits"
+msgstr ""
+
+#: src/shortcuts-dialog.blp:6
+msgid "Shortcuts"
+msgstr ""
+
+#: src/shortcuts-dialog.blp:9
+msgctxt "shortcut window"
+msgid "Show Shortcuts"
+msgstr ""
+
+#: src/shortcuts-dialog.blp:14
+msgctxt "shortcut window"
+msgid "Quit"
+msgstr ""
+
+#: src/window.blp:5
+msgid "Desktop-files-editor"
+msgstr ""
+
+#: src/window.blp:16
+msgid "Main Menu"
+msgstr ""
+
+#: src/window.blp:22
+msgid "Hello mom!"
+msgstr ""
+
+#: src/window.blp:34
+msgid "_Preferences"
+msgstr ""
+
+#: src/window.blp:39
+msgid "_Keyboard Shortcuts"
+msgstr ""
+
+#: src/window.blp:44
+msgid "_About Desktop-files-editor"
+msgstr ""
