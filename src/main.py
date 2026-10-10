@@ -21,11 +21,11 @@ import sys
 from gettext import gettext as _
 
 import gi
-from gi.repository import Adw, Gio
 
 gi.require_version("Gtk", "4.0")
 gi.require_version("Adw", "1")
 
+from gi.repository import Adw, Gio  # noqa: E402
 
 from .window import DesktopFilesEditorWindow  # noqa: E402
 
@@ -64,8 +64,8 @@ class DesktopFilesEditorApplication(Adw.Application):
             # Translators: Replace "translator-credits" with your name/username,
             # and optionally an email or URL.
             translator_credits=_("translator-credits"),
-            developers=["mathieu"],
-            copyright="© 2026 mathieu",
+            developers=["Mathieu Marthy"],
+            copyright="© 2026 Mathieu Marthy",
         )
         about.present(self.props.active_window)
 

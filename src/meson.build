@@ -49,7 +49,10 @@ desktop_files_editor_sources = [
     'main.py',
     'window.py',
     'models/__init__.py',
-    'models/desktop_entry.py',
+    'models/desktop_model.py',
+    'models/scan_desktop_files.py',
+    'utils/__init__.py',
+    'utils/paths.py',
 ]
 
 install_data(
