@@ -1,3 +1,8 @@
+[project]
+name = "desktop-files-editor"
+version = "0.1.0"
+requires-python = ">=3.13"
+
 [tool.ruff]
 line-length = 100
 target-version = "py313"
@@ -5,3 +10,21 @@ builtins = ["_"]
 
 [tool.ruff.lint]
 select = ["E", "F", "W", "I", "UP", "B"]
+
+[tool.pyright]
+venvPath = "."
+venv = ".venv"
+reportMissingModuleSource = false
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
+
+[dependency-groups]
+dev = ["pytest", "ruff", "pygobject-stubs"]
+
+[tool.uv]
+package = false
+
+[tool.uv.config-settings-package]
+pygobject-stubs = { config = "Gtk4,Gdk4" }

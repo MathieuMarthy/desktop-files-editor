@@ -11,10 +11,7 @@ All commands below are run from the project root.
 
 ## Setup (once)
 
-requirements:
-- meson
-- blueprint-compiler
-- gettext
+Install the [development requirements](../README.md#requirements), then:
 
 ```sh
 meson setup build
