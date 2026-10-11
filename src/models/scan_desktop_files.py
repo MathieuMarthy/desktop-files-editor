@@ -1,9 +1,12 @@
+import logging
 from pathlib import Path
 
 from gi.repository import Gio, GLib
 
 from ..utils.paths import system_applications_dirs, user_applications_dir
 from .desktop_model import DesktopModel
+
+logger = logging.getLogger(__name__)
 
 KEYFILE_GROUP = "Desktop Entry"
 
@@ -28,7 +31,8 @@ def scan_directory(path: Path) -> list[Gio.File]:
         enumerator = directory.enumerate_children(
             "standard::name", Gio.FileQueryInfoFlags.NONE, None
         )
-    except GLib.Error:
+    except GLib.Error as error:
+        logger.debug("Cannot scan the path %s: %s", path, error.message)
         return []
 
     return [
@@ -46,7 +50,8 @@ def load_desktop_model_from_file(file: Gio.File) -> DesktopModel | None:
             GLib.KeyFileFlags.KEEP_COMMENTS | GLib.KeyFileFlags.KEEP_TRANSLATIONS,
         )
         app_name = key_file.get_locale_string(KEYFILE_GROUP, "Name", None)
-    except GLib.Error:
+    except GLib.Error as error:
+        logger.warning("Failed to open and read the file %s: %s", file_path, error.message)
         return None
 
     app_icon = (

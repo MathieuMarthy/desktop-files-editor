@@ -17,6 +17,8 @@
 #
 # SPDX-License-Identifier: GPL-3.0-or-later
 
+import logging
+import os
 import sys
 from gettext import gettext as _
 
@@ -91,5 +93,11 @@ class DesktopFilesEditorApplication(Adw.Application):
 
 def main(version):
     """The application's entry point."""
+
+    logging.basicConfig(
+        level=logging.DEBUG if os.environ.get("DFE_DEBUG") else logging.INFO,
+        format="%(levelname)s %(name)s: %(message)s",
+    )
+
     app = DesktopFilesEditorApplication()
     return app.run(sys.argv)
