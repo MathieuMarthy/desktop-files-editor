@@ -6,3 +6,4 @@ class DesktopModel(GObject.Object):
 
     app_name = GObject.Property(type=str, default="")
     app_icon = GObject.Property(type=str, default="")
+    is_hidden = GObject.Property(type=bool, default=False)

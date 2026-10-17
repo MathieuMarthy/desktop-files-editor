@@ -1,0 +1,24 @@
+using Gtk 4.0;
+using Adw 1;
+
+template $DesktopFilesEditorSideBar: Adw.NavigationPage {
+    title: _("Applications");
+
+    child: Adw.ToolbarView {
+        [top]
+        Adw.HeaderBar {}
+
+        content: ScrolledWindow {
+            hscrollbar-policy: never;
+
+            child: ListBox list_box {
+                selection-mode: single;
+                row-selected => $on_row_selected();
+
+                styles [
+                    "navigation-sidebar",
+                ]
+            };
+        };
+    };
+}

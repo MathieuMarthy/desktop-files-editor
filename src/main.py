@@ -27,8 +27,9 @@ import gi
 gi.require_version("Gtk", "4.0")
 gi.require_version("Adw", "1")
 
-from gi.repository import Adw, Gio  # noqa: E402
+from gi.repository import Adw, Gdk, Gio, Gtk  # noqa: E402
 
+from .utils.paths import icon_search_dirs  # noqa: E402
 from .window import DesktopFilesEditorWindow  # noqa: E402
 
 
@@ -44,6 +45,17 @@ class DesktopFilesEditorApplication(Adw.Application):
         self.create_action("quit", lambda *_: self.quit(), ["<control>q"])
         self.create_action("about", self.on_about_action)
         self.create_action("preferences", self.on_preferences_action)
+
+    def do_startup(self):
+        Adw.Application.do_startup(self)
+
+        # Make the icons of the host and of the Flatpak apps visible from the sandbox
+        display = Gdk.Display.get_default()
+        if display is None:
+            return
+        theme = Gtk.IconTheme.get_for_display(display)
+        for directory in icon_search_dirs():
+            theme.add_search_path(str(directory))
 
     def do_activate(self):
         """Called when the application is activated.

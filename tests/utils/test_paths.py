@@ -75,3 +75,41 @@ def test_system_dirs_contain_flatpak_user_exports(monkeypatch):
 
     expected = Path("/custom/data/flatpak/exports/share/applications")
     assert expected in paths.system_applications_dirs()
+
+
+# host_path
+
+
+def test_host_path_outside_flatpak(monkeypatch):
+    monkeypatch.setattr(paths, "IN_FLATPAK", False)
+
+    assert paths.host_path("/usr/share/pixmaps/app.png") == Path("/usr/share/pixmaps/app.png")
+
+
+def test_host_path_inside_flatpak(monkeypatch):
+    monkeypatch.setattr(paths, "IN_FLATPAK", True)
+
+    expected = Path("/run/host/usr/share/pixmaps/app.png")
+    assert paths.host_path("/usr/share/pixmaps/app.png") == expected
+
+
+def test_host_path_inside_flatpak_keeps_other_paths(monkeypatch):
+    monkeypatch.setattr(paths, "IN_FLATPAK", True)
+
+    assert paths.host_path("/opt/app/icon.png") == Path("/opt/app/icon.png")
+
+
+# icon_search_dirs
+
+
+def test_icon_dirs_inside_flatpak(monkeypatch):
+    monkeypatch.setattr(paths, "IN_FLATPAK", True)
+    monkeypatch.setenv("XDG_DATA_HOME", "/custom/data")
+
+    assert paths.icon_search_dirs() == [
+        Path("/custom/data/icons"),
+        Path("/custom/data/flatpak/exports/share/icons"),
+        Path("/var/lib/flatpak/exports/share/icons"),
+        Path("/run/host/usr/share/icons"),
+        Path("/run/host/usr/share/pixmaps"),
+    ]

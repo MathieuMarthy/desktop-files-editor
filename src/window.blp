@@ -6,24 +6,24 @@ template $DesktopFilesEditorWindow: Adw.ApplicationWindow {
   default-width: 800;
   default-height: 600;
 
-  content: Adw.ToolbarView {
-    [top]
-    Adw.HeaderBar {
-      [end]
-      MenuButton {
-        primary: true;
-        icon-name: "open-menu-symbolic";
-        tooltip-text: _("Main Menu");
-        menu-model: primary_menu;
-      }
-    }
+  content: Adw.NavigationSplitView {
+    sidebar: $DesktopFilesEditorSideBar {};
 
-    content: Label label {
-      label: _("Hello mom!");
+    content: Adw.NavigationPage {
+      title: _("Content");
 
-      styles [
-        "title-1",
-      ]
+      child: Adw.ToolbarView {
+        [top]
+        Adw.HeaderBar {
+          [end]
+          MenuButton {
+            primary: true;
+            icon-name: "open-menu-symbolic";
+            tooltip-text: _("Main Menu");
+            menu-model: primary_menu;
+          }
+        }
+      };
     };
   };
 }

@@ -19,12 +19,12 @@
 
 from gi.repository import Adw, Gtk
 
+from .pages.sidebar import Sidebar  # noqa: F401
+
 
 @Gtk.Template(resource_path="/net/dzqdzq/DesktopFilesEditor/window.ui")
 class DesktopFilesEditorWindow(Adw.ApplicationWindow):
     __gtype_name__ = "DesktopFilesEditorWindow"
-
-    label = Gtk.Template.Child()
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)

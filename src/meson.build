@@ -5,8 +5,9 @@ gnome = import('gnome')
 blueprints = custom_target(
     'blueprints',
     input: files(
-        'window.blp',
+        'pages/sidebar.blp',
         'shortcuts-dialog.blp',
+        'window.blp',
     ),
     output: '.',
     command: [
@@ -47,12 +48,14 @@ configure_file(
 desktop_files_editor_sources = [
     '__init__.py',
     'main.py',
-    'window.py',
     'models/__init__.py',
     'models/desktop_model.py',
     'models/scan_desktop_files.py',
+    'pages/__init__.py',
+    'pages/sidebar.py',
     'utils/__init__.py',
     'utils/paths.py',
+    'window.py',
 ]
 
 install_data(

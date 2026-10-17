@@ -60,4 +60,12 @@ def load_desktop_model_from_file(file: Gio.File) -> DesktopModel | None:
         else ""
     )
 
-    return DesktopModel(desktop_file_path=file_path, app_name=app_name, app_icon=app_icon)
+    is_hidden = (
+        key_file.get_boolean(KEYFILE_GROUP, "NoDisplay")
+        if "NoDisplay" in key_file.get_keys(KEYFILE_GROUP)[0]
+        else ""
+    )
+
+    return DesktopModel(
+        desktop_file_path=file_path, app_name=app_name, app_icon=app_icon, is_hidden=is_hidden
+    )
