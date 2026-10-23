@@ -5,10 +5,13 @@ IN_FLATPAK = Path("/.flatpak-info").exists()
 
 
 def user_data_dir() -> Path:
-    data_home = os.environ.get("HOST_XDG_DATA_HOME") or os.environ.get(
-        "XDG_DATA_HOME", str(Path.home() / ".local/share")
-    )
-    return Path(data_home)
+    if IN_FLATPAK:
+        # In the sandbox, XDG_DATA_HOME is the app's private folder (~/.var/app/<id>/data).
+        # Flatpak only sets HOST_XDG_DATA_HOME when XDG_DATA_HOME is set on the host.
+        data_home = os.environ.get("HOST_XDG_DATA_HOME")
+    else:
+        data_home = os.environ.get("XDG_DATA_HOME")
+    return Path(data_home) if data_home else Path.home() / ".local/share"
 
 
 def host_path(path: str | Path) -> Path:

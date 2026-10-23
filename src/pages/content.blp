@@ -1,0 +1,84 @@
+using Gtk 4.0;
+using Adw 1;
+
+template $DesktopFilesEditorContent: Adw.NavigationPage {
+  title: _("Application");
+
+  child: Adw.ToolbarView {
+    [top]
+    Adw.HeaderBar {
+      [end]
+      Button button_save {
+        label: _("Save");
+        sensitive: bind template.has-changes;
+        clicked => $save_modifications();
+
+        styles [
+          "suggested-action",
+        ]
+      }
+    }
+
+    content: Stack stack {
+      Adw.StatusPage empty_page {
+        icon-name: "application-x-executable-symbolic";
+        title: _("No Application Selected");
+        description: _("Select an application in the list to edit it");
+      }
+
+      Adw.PreferencesPage editor_page {
+        Adw.PreferencesGroup {
+          Box {
+            orientation: vertical;
+            spacing: 12;
+
+            Image app_icon {
+              pixel-size: 128;
+            }
+
+            Label {
+              label: bind template.selected-desktop as <$DesktopFilesEditorDesktopModel>.app-name;
+
+              styles [
+                "title-1",
+              ]
+            }
+          }
+        }
+
+        Adw.PreferencesGroup {
+          title: _("General");
+
+          Adw.EntryRow entry_app_name {
+            title: _("Name");
+            text: bind template.selected-desktop as <$DesktopFilesEditorDesktopModel>.app-name;
+            changed => $on_field_change();
+          }
+
+          Adw.EntryRow entry_app_icon {
+            title: _("Icon");
+            text: bind template.selected-desktop as <$DesktopFilesEditorDesktopModel>.app-icon;
+            changed => $on_field_change();
+          }
+
+          Adw.ActionRow {
+            title: _("Path");
+            subtitle: bind template.selected-desktop as <$DesktopFilesEditorDesktopModel>.desktop-file-path;
+
+            [suffix]
+            Button copy_path {
+              icon-name: "edit-copy-symbolic";
+              tooltip-text: _("Copy Path");
+              valign: center;
+              clicked => $copy_path_to_clipboard();
+
+              styles [
+                "flat",
+              ]
+            }
+          }
+        }
+      }
+    };
+  };
+}

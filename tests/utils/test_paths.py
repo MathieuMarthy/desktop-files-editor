@@ -11,22 +11,16 @@ FLATPAK_SYSTEM_EXPORTS = Path("/var/lib/flatpak/exports/share/applications")
 def clean_env(monkeypatch):
     monkeypatch.delenv("HOST_XDG_DATA_HOME", raising=False)
     monkeypatch.delenv("XDG_DATA_HOME", raising=False)
+    monkeypatch.setattr(paths, "IN_FLATPAK", False)
 
 
-# user_applications_dir
+@pytest.fixture
+def home(monkeypatch, tmp_path):
+    monkeypatch.setenv("HOME", str(tmp_path))
+    return tmp_path
 
 
-def test_user_dir_uses_host_xdg_data_home(monkeypatch):
-    monkeypatch.setenv("HOST_XDG_DATA_HOME", "/host/data")
-
-    assert paths.user_applications_dir() == Path("/host/data/applications")
-
-
-def test_user_dir_prefers_host_over_xdg_data_home(monkeypatch):
-    monkeypatch.setenv("HOST_XDG_DATA_HOME", "/host/data")
-    monkeypatch.setenv("XDG_DATA_HOME", "/sandbox/data")
-
-    assert paths.user_applications_dir() == Path("/host/data/applications")
+# user_applications_dir, outside Flatpak
 
 
 def test_user_dir_uses_xdg_data_home(monkeypatch):
@@ -35,17 +29,40 @@ def test_user_dir_uses_xdg_data_home(monkeypatch):
     assert paths.user_applications_dir() == Path("/custom/data/applications")
 
 
-def test_user_dir_ignores_empty_host_xdg_data_home(monkeypatch):
+def test_user_dir_ignores_host_xdg_data_home(monkeypatch, home):
+    monkeypatch.setenv("HOST_XDG_DATA_HOME", "/host/data")
+
+    assert paths.user_applications_dir() == home / ".local/share/applications"
+
+
+def test_user_dir_falls_back_to_home(home):
+    assert paths.user_applications_dir() == home / ".local/share/applications"
+
+
+# user_applications_dir, inside Flatpak
+
+
+def test_flatpak_user_dir_uses_host_xdg_data_home(monkeypatch):
+    monkeypatch.setattr(paths, "IN_FLATPAK", True)
+    monkeypatch.setenv("HOST_XDG_DATA_HOME", "/host/data")
+    monkeypatch.setenv("XDG_DATA_HOME", "/sandbox/data")
+
+    assert paths.user_applications_dir() == Path("/host/data/applications")
+
+
+def test_flatpak_user_dir_ignores_sandbox_xdg_data_home(monkeypatch, home):
+    # Real case: XDG_DATA_HOME points to ~/.var/app/<id>/data and HOST_XDG_DATA_HOME is unset
+    monkeypatch.setattr(paths, "IN_FLATPAK", True)
+    monkeypatch.setenv("XDG_DATA_HOME", str(home / ".var/app/net.dzqdzq.DesktopFilesEditor/data"))
+
+    assert paths.user_applications_dir() == home / ".local/share/applications"
+
+
+def test_flatpak_user_dir_ignores_empty_host_xdg_data_home(monkeypatch, home):
+    monkeypatch.setattr(paths, "IN_FLATPAK", True)
     monkeypatch.setenv("HOST_XDG_DATA_HOME", "")
-    monkeypatch.setenv("XDG_DATA_HOME", "/custom/data")
 
-    assert paths.user_applications_dir() == Path("/custom/data/applications")
-
-
-def test_user_dir_falls_back_to_home(monkeypatch, tmp_path):
-    monkeypatch.setenv("HOME", str(tmp_path))
-
-    assert paths.user_applications_dir() == tmp_path / ".local/share/applications"
+    assert paths.user_applications_dir() == home / ".local/share/applications"
 
 
 # system_applications_dirs
@@ -104,7 +121,7 @@ def test_host_path_inside_flatpak_keeps_other_paths(monkeypatch):
 
 def test_icon_dirs_inside_flatpak(monkeypatch):
     monkeypatch.setattr(paths, "IN_FLATPAK", True)
-    monkeypatch.setenv("XDG_DATA_HOME", "/custom/data")
+    monkeypatch.setenv("HOST_XDG_DATA_HOME", "/custom/data")
 
     assert paths.icon_search_dirs() == [
         Path("/custom/data/icons"),

@@ -4,6 +4,9 @@ data/net.dzqdzq.DesktopFilesEditor.desktop.in
 data/net.dzqdzq.DesktopFilesEditor.gschema.xml
 data/net.dzqdzq.DesktopFilesEditor.metainfo.xml.in
 src/main.py
+src/pages/content.blp
+src/pages/content.py
+src/pages/sidebar.blp
 src/shortcuts-dialog.blp
 src/window.blp
 src/window.py

@@ -1,12 +1,8 @@
-from pathlib import Path
-
-from gi.repository import Adw, Gio, Gtk
+from gi.repository import Adw, Gio, GObject, Gtk
 
 from ..models.desktop_model import DesktopModel
 from ..models.scan_desktop_files import scan_desktop_files
-from ..utils.paths import host_path
-
-FALLBACK_ICON = "application-x-executable"
+from ..utils.display_image import set_app_icon
 
 
 @Gtk.Template(resource_path="/net/dzqdzq/DesktopFilesEditor/pages/sidebar.ui")
@@ -14,6 +10,8 @@ class Sidebar(Adw.NavigationPage):
     __gtype_name__ = "DesktopFilesEditorSideBar"
 
     list_box: Gtk.ListBox = Gtk.Template.Child()
+
+    selected_desktop = GObject.Property(type=DesktopModel)
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -31,32 +29,16 @@ class Sidebar(Adw.NavigationPage):
                 self.store.append(model)
 
     def _create_row(self, model: DesktopModel) -> Gtk.Widget:
-        row = Adw.ActionRow(
-            title=model.app_name, subtitle=model.desktop_file_path, use_markup=False
-        )
-        row.add_prefix(self._create_icon(model.app_icon))
+        row = Adw.ActionRow(title=model.app_name, use_markup=False)
+        icon = Gtk.Image(pixel_size=32)
+        set_app_icon(icon, model.app_icon)
+        row.add_prefix(icon)
         return row
-
-    def _create_icon(self, icon: str) -> Gtk.Image:
-        # Icon= is either a theme icon name or an absolute path to an image
-        if Path(icon).is_absolute():
-            path = host_path(icon)
-            if path.is_file():
-                return Gtk.Image(file=str(path), pixel_size=32)
-            icon = ""
-
-        theme = Gtk.IconTheme.get_for_display(self.get_display())
-        if not icon or not theme.has_icon(icon):
-            icon = FALLBACK_ICON
-        return Gtk.Image(icon_name=icon, pixel_size=32)
 
     @Gtk.Template.Callback()
     def on_row_selected(self, list_box: Gtk.ListBox, row: Gtk.ListBoxRow | None):
         if row is None:
+            self.selected_desktop = None
             return
 
-        model = self.store.get_item(row.get_index())
-        if model is None:
-            return
-
-        print(f"{model.app_name=}{model.app_icon=}")
+        self.selected_desktop = self.store.get_item(row.get_index())

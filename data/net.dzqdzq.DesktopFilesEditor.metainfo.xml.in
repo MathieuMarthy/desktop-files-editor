@@ -4,14 +4,14 @@
   <metadata_license>CC0-1.0</metadata_license>
   <project_license>GPL-3.0-or-later</project_license>
 
-  <name>Desktop Files Editor</name>
+  <name translate="no">Desktop Files Editor</name>
   <summary>Manage your .desktop files</summary>
   <description>
     <p>With Desktop Files Editor you can see, edit, add or remove your .desktop files.</p>
   </description>
 
   <developer id="net.dzqdzq">
-    <name>Mathieu Marthy</name>
+    <name translate="no">Mathieu Marthy</name>
   </developer>
 
   <url type="homepage">https://github.com/MathieuMarthy/desktop-files-editor</url>

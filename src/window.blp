@@ -2,47 +2,17 @@ using Gtk 4.0;
 using Adw 1;
 
 template $DesktopFilesEditorWindow: Adw.ApplicationWindow {
-  title: _("Desktop-files-editor");
+  title: "Desktop Files Editor";
   default-width: 800;
   default-height: 600;
 
-  content: Adw.NavigationSplitView {
-    sidebar: $DesktopFilesEditorSideBar {};
+  content: Adw.ToastOverlay toast_overlay {
+    child: Adw.NavigationSplitView {
+      sidebar: $DesktopFilesEditorSideBar sidebar {};
 
-    content: Adw.NavigationPage {
-      title: _("Content");
-
-      child: Adw.ToolbarView {
-        [top]
-        Adw.HeaderBar {
-          [end]
-          MenuButton {
-            primary: true;
-            icon-name: "open-menu-symbolic";
-            tooltip-text: _("Main Menu");
-            menu-model: primary_menu;
-          }
-        }
+      content: $DesktopFilesEditorContent {
+        selected-desktop: bind sidebar.selected-desktop;
       };
     };
   };
-}
-
-menu primary_menu {
-  section {
-    item {
-      label: _("_Preferences");
-      action: "app.preferences";
-    }
-
-    item {
-      label: _("_Keyboard Shortcuts");
-      action: "app.shortcuts";
-    }
-
-    item {
-      label: _("_About Desktop-files-editor");
-      action: "app.about";
-    }
-  }
 }

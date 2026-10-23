@@ -19,6 +19,7 @@
 
 from gi.repository import Adw, Gtk
 
+from .pages.content import Content  # noqa: F401
 from .pages.sidebar import Sidebar  # noqa: F401
 
 
@@ -26,5 +27,7 @@ from .pages.sidebar import Sidebar  # noqa: F401
 class DesktopFilesEditorWindow(Adw.ApplicationWindow):
     __gtype_name__ = "DesktopFilesEditorWindow"
 
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
+    toast_overlay: Adw.ToastOverlay = Gtk.Template.Child()
+
+    def show_toast(self, toast: Adw.Toast) -> None:
+        self.toast_overlay.add_toast(toast)
