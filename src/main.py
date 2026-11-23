@@ -45,6 +45,7 @@ class DesktopFilesEditorApplication(Adw.Application):
         self.create_action("quit", lambda *_: self.quit(), ["<control>q"])
         self.create_action("about", self.on_about_action)
         self.create_action("preferences", self.on_preferences_action)
+        self.create_action("search", self.on_search_action, ["<control>f"])
 
     def do_startup(self):
         Adw.Application.do_startup(self)
@@ -85,7 +86,13 @@ class DesktopFilesEditorApplication(Adw.Application):
 
     def on_preferences_action(self, widget, _):
         """Callback for the app.preferences action."""
-        print("app.preferences action activated")
+        pass
+
+    def on_search_action(self, *_):
+        search_bar: Gtk.SearchBar = self.props.active_window.sidebar.search_bar  # type: ignore
+
+        is_search_mode_active = search_bar.get_search_mode()
+        search_bar.set_search_mode(not is_search_mode_active)
 
     def create_action(self, name, callback, shortcuts=None):
         """Add an application action.

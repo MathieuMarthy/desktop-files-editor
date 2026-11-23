@@ -10,6 +10,8 @@ class Sidebar(Adw.NavigationPage):
     __gtype_name__ = "DesktopFilesEditorSideBar"
 
     list_box: Gtk.ListBox = Gtk.Template.Child()
+    search_bar: Gtk.SearchBar = Gtk.Template.Child()
+    search_entry: Gtk.SearchEntry = Gtk.Template.Child()
 
     selected_desktop = GObject.Property(type=DesktopModel)
 
@@ -19,7 +21,11 @@ class Sidebar(Adw.NavigationPage):
         self.store = Gio.ListStore(item_type=DesktopModel)
         self.list_box.bind_model(self.store, self._create_row)
 
+        self.list_box.set_filter_func(self._filter)
+
         self.refresh_list()
+
+        self.search_bar.get_search_mode()
 
     def refresh_list(self):
         self.store.remove_all()
@@ -40,9 +46,16 @@ class Sidebar(Adw.NavigationPage):
         return row
 
     @Gtk.Template.Callback()
-    def on_row_selected(self, list_box: Gtk.ListBox, row: Gtk.ListBoxRow | None):
+    def on_row_selected(self, _, row: Gtk.ListBoxRow | None):
         if row is None:
             self.selected_desktop = None
             return
 
         self.selected_desktop = self.store.get_item(row.get_index())
+
+    @Gtk.Template.Callback()
+    def on_search_changed(self, _):
+        self.list_box.invalidate_filter()
+
+    def _filter(self, row: Adw.ActionRow) -> bool:
+        return self.search_entry.get_text().lower().strip() in row.get_title().lower()

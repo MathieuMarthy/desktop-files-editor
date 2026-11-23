@@ -3,7 +3,7 @@ using Adw 1;
 
 Adw.ShortcutsDialog shortcuts_dialog {
   Adw.ShortcutsSection {
-    title: _("Shortcuts");
+    title: _("General");
 
     Adw.ShortcutsItem {
       title: C_("shortcut window", "Show Shortcuts");
@@ -13,6 +13,15 @@ Adw.ShortcutsDialog shortcuts_dialog {
     Adw.ShortcutsItem {
       title: C_("shortcut window", "Quit");
       action-name: "app.quit";
+    }
+  }
+
+  Adw.ShortcutsSection {
+    title: _("Applications");
+
+    Adw.ShortcutsItem {
+      title: C_("shortcut window", "Find");
+      action-name: "app.search";
     }
   }
 }

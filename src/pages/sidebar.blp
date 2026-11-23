@@ -7,6 +7,11 @@ template $DesktopFilesEditorSideBar: Adw.NavigationPage {
   child: Adw.ToolbarView {
     [top]
     Adw.HeaderBar {
+      [start]
+      ToggleButton search_button {
+        icon-name: "system-search-symbolic";
+      }
+
       [end]
       MenuButton {
         primary: true;
@@ -16,17 +21,30 @@ template $DesktopFilesEditorSideBar: Adw.NavigationPage {
       }
     }
 
-    content: ScrolledWindow {
-      hscrollbar-policy: never;
+    content: Box {
+      orientation: vertical;
+      spacing: 4;
 
-      child: ListBox list_box {
-        selection-mode: single;
-        row-selected => $on_row_selected();
+      SearchBar search_bar {
+        search-mode-enabled: bind search_button.active bidirectional;
 
-        styles [
-          "navigation-sidebar",
-        ]
-      };
+        SearchEntry search_entry {
+          search-changed => $on_search_changed();
+        }
+      }
+
+      ScrolledWindow {
+        vexpand: true;
+
+        child: ListBox list_box {
+          selection-mode: single;
+          row-selected => $on_row_selected();
+
+          styles [
+            "navigation-sidebar",
+          ]
+        };
+      }
     };
   };
 }
