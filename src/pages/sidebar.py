@@ -25,8 +25,6 @@ class Sidebar(Adw.NavigationPage):
 
         self.refresh_list()
 
-        self.search_bar.get_search_mode()
-
     def refresh_list(self):
         self.store.remove_all()
 

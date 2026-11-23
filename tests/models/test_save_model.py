@@ -1,8 +1,9 @@
 import pytest
-from gi.repository import GLib
+from gi.repository import Gio, GLib
 
 from src.models.desktop_model import DesktopModel
 from src.models.save_model import save_model
+from src.models.scan_desktop_files import load_desktop_model_from_file
 from src.utils import paths
 from src.utils.const import KEYFILE_GROUP
 
@@ -22,7 +23,12 @@ def read(path) -> GLib.KeyFile:
 
 
 def model_for(path, **kwargs) -> DesktopModel:
-    return DesktopModel(desktop_file_path=str(path), **kwargs)
+    """Model loaded from the file then edited, like the UI does."""
+    model = load_desktop_model_from_file(Gio.File.new_for_path(str(path)))
+    assert model is not None
+    for name, value in kwargs.items():
+        model.set_property(name, value)
+    return model
 
 
 def test_save_user_file_in_place(user_dir, make_desktop_file):
@@ -86,6 +92,25 @@ def test_save_does_not_add_empty_optional_keys(user_dir, make_desktop_file):
     content = path.read_text()
     assert "Icon" not in content
     assert "NoDisplay" not in content
+    assert "Exec" not in content
+    assert "Comment" not in content
+
+
+def test_save_unchanged_model_round_trips(user_dir, make_desktop_file, monkeypatch):
+    monkeypatch.setenv("LANGUAGE", "fr")
+    content = (
+        "[Desktop Entry]\nName=Firefox\nName[fr]=Renard\nComment=Browser\n"
+        "Comment[fr]=Navigateur\nIcon=firefox\nExec=firefox %u\nNoDisplay=true\n"
+    )
+    path = make_desktop_file(user_dir, content=content)
+    before = model_for(path)
+
+    save_model(before)
+
+    after = model_for(path)
+    for pspec in before.list_properties():
+        assert after.get_property(pspec.name) == before.get_property(pspec.name), pspec.name
+    assert read(path).get_string(KEYFILE_GROUP, "Comment") == "Browser"
 
 
 def test_save_hidden_writes_no_display(user_dir, make_desktop_file):
@@ -94,3 +119,37 @@ def test_save_hidden_writes_no_display(user_dir, make_desktop_file):
     save_model(model_for(path, app_name="Firefox", app_icon="firefox", is_hidden=True))
 
     assert read(path).get_boolean(KEYFILE_GROUP, "NoDisplay") is True
+
+
+def test_save_comment_in_its_own_locale(user_dir, make_desktop_file, monkeypatch):
+    monkeypatch.setenv("LANGUAGE", "fr")
+    content = "[Desktop Entry]\nName=Firefox\nComment=Browser\nComment[fr]=Navigateur\n"
+    path = make_desktop_file(user_dir, content=content)
+
+    save_model(model_for(path, app_name="Fox", comment="Butineur"))
+
+    key_file = read(path)
+    assert key_file.get_string(KEYFILE_GROUP, "Name") == "Fox"
+    assert key_file.get_locale_string(KEYFILE_GROUP, "Comment", "fr") == "Butineur"
+    assert key_file.get_string(KEYFILE_GROUP, "Comment") == "Browser"
+
+
+def test_save_empty_comment_removes_it_and_its_translations(
+    user_dir, make_desktop_file, monkeypatch
+):
+    monkeypatch.setenv("LANGUAGE", "fr")
+    content = "[Desktop Entry]\nName=Firefox\nComment=Browser\nComment[fr]=Navigateur\n"
+    path = make_desktop_file(user_dir, content=content)
+
+    save_model(model_for(path, comment=""))
+
+    assert "Comment" not in path.read_text()
+
+
+def test_save_empty_exec_is_refused(user_dir, make_desktop_file):
+    path = make_desktop_file(user_dir)
+
+    with pytest.raises(ValueError):
+        save_model(model_for(path, exec_command=""))
+
+    assert read(path).get_string(KEYFILE_GROUP, "Exec") == "firefox %u"

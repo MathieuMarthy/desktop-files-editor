@@ -3,7 +3,7 @@ from pathlib import Path
 
 from gi.repository import Gio, GLib
 
-from ..utils.const import KEYFILE_GROUP
+from ..utils.const import KEYFILE_GROUP, LOCALIZED_KEYS, STRING_KEYS
 from ..utils.paths import system_applications_dirs, user_applications_dir
 from .desktop_model import DesktopModel
 
@@ -65,26 +65,24 @@ def load_desktop_model_from_file(file: Gio.File) -> DesktopModel | None:
             file_path,
             GLib.KeyFileFlags.KEEP_COMMENTS | GLib.KeyFileFlags.KEEP_TRANSLATIONS,
         )
-        app_name = key_file.get_locale_string(KEYFILE_GROUP, "Name", None)
+        keys = key_file.get_keys(KEYFILE_GROUP)[0]
+
+        if "Name" not in keys:
+            raise GLib.Error("no Name key")
+
+        values = {
+            prop: _get_string(key_file, key) for key, prop in STRING_KEYS.items() if key in keys
+        }
+        is_hidden = "NoDisplay" in keys and key_file.get_boolean(KEYFILE_GROUP, "NoDisplay")
     except GLib.Error as error:
         logger.warning("Failed to open and read the file %s: %s", file_path, error.message)
         return None
 
-    app_icon = (
-        key_file.get_string(KEYFILE_GROUP, "Icon")
-        if "Icon" in key_file.get_keys(KEYFILE_GROUP)[0]
-        else ""
-    )
+    return DesktopModel(desktop_file_path=file_path, is_hidden=is_hidden, **values)
 
-    is_hidden = (
-        key_file.get_boolean(KEYFILE_GROUP, "NoDisplay")
-        if "NoDisplay" in key_file.get_keys(KEYFILE_GROUP)[0]
-        else False
-    )
 
-    return DesktopModel(
-        desktop_file_path=file_path,
-        app_name=app_name,
-        app_icon=app_icon,
-        is_hidden=is_hidden,
-    )
+def _get_string(key_file: GLib.KeyFile, key: str) -> str:
+    if key in LOCALIZED_KEYS:
+        return key_file.get_locale_string(KEYFILE_GROUP, key, None)
+
+    return key_file.get_string(KEYFILE_GROUP, key)

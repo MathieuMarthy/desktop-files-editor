@@ -10,7 +10,7 @@ template $DesktopFilesEditorWindow: Adw.ApplicationWindow {
     child: Adw.NavigationSplitView {
       sidebar: $DesktopFilesEditorSideBar sidebar {};
 
-      content: $DesktopFilesEditorContent {
+      content: $DesktopFilesEditorContent content {
         selected-desktop: bind sidebar.selected-desktop;
       };
     };

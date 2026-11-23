@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: desktop-files-editor\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-23 19:13-0400\n"
-"PO-Revision-Date: 2026-10-23 19:14-0400\n"
+"POT-Creation-Date: 2026-11-23 12:57-0500\n"
+"PO-Revision-Date: 2026-11-23 13:45-0500\n"
 "Last-Translator: Mathieu Marthy <mathieu.marthy@pm.me>\n"
 "Language-Team: French\n"
 "Language: fr\n"
@@ -41,7 +41,7 @@ msgstr ""
 
 #. Translators: Replace "translator-credits" with your name/username,
 #. and optionally an email or URL.
-#: src/main.py:80
+#: src/main.py:82
 msgid "translator-credits"
 msgstr "Mathieu Marthy"
 
@@ -61,7 +61,7 @@ msgstr "Aucune application sélectionnée"
 msgid "Select an application in the list to edit it"
 msgstr "Sélectionnez une application dans la liste pour la modifier"
 
-#: src/pages/content.blp:50
+#: src/pages/content.blp:50 src/shortcuts-dialog.blp:6
 msgid "General"
 msgstr "Général"
 
@@ -74,44 +74,60 @@ msgid "Icon"
 msgstr "Icône"
 
 #: src/pages/content.blp:65
+msgid "Comment"
+msgstr "Commentaire"
+
+#: src/pages/content.blp:72
+msgid "Technical"
+msgstr "Technique"
+
+#: src/pages/content.blp:75
 msgid "Path"
 msgstr "Chemin"
 
-#: src/pages/content.blp:71
+#: src/pages/content.blp:81
 msgid "Copy Path"
 msgstr "Copier le chemin"
 
-#: src/pages/content.py:44
+#: src/pages/content.blp:92
+msgid "Command"
+msgstr "Commande"
+
+#: src/pages/content.blp:98
+msgid "Is hidden"
+msgstr "Est caché"
+
+#: src/pages/content.py:62
 msgid "Path copied to clipboard"
 msgstr "Chemin copié dans le presse papier"
 
-#: src/pages/content.py:62
-msgid "Not Implemented yet"
-msgstr "Pas encore implémenté"
+#: src/pages/content.py:101
+msgid "Fail to save modification"
+msgstr "Erreur lors de la sauvegarde"
 
-#: src/pages/sidebar.blp:5
+#: src/pages/content.py:114
+msgid "Modifications saved"
+msgstr "Modifications enregistrées"
+
+#: src/pages/sidebar.blp:5 src/shortcuts-dialog.blp:20
 msgid "Applications"
 msgstr "Applications"
 
-#: src/pages/sidebar.blp:14
+#: src/pages/sidebar.blp:19
 msgid "Main Menu"
 msgstr "Menu principal"
 
-#: src/pages/sidebar.blp:37
+#: src/pages/sidebar.blp:55
 msgid "_Preferences"
 msgstr "_Préférences"
 
-#: src/pages/sidebar.blp:42
+#: src/pages/sidebar.blp:60
 msgid "_Keyboard Shortcuts"
 msgstr "_Raccourcis claviers"
 
-#: src/pages/sidebar.blp:47
+#: src/pages/sidebar.blp:65
 msgid "_About Desktop Files Editor"
 msgstr "_À propos de Desktop Files Editor"
-
-#: src/shortcuts-dialog.blp:6
-msgid "Shortcuts"
-msgstr "Raccourcis"
 
 #: src/shortcuts-dialog.blp:9
 msgctxt "shortcut window"
@@ -122,6 +138,22 @@ msgstr "Afficher les raccourcis"
 msgctxt "shortcut window"
 msgid "Quit"
 msgstr "Quitter"
+
+#: src/shortcuts-dialog.blp:23
+msgctxt "shortcut window"
+msgid "Find"
+msgstr "Rechercher"
+
+#: src/shortcuts-dialog.blp:28
+msgctxt "shortcut window"
+msgid "Save"
+msgstr "Enregistrer"
+
+#~ msgid "Not Implemented yet"
+#~ msgstr "Pas encore implémenté"
+
+#~ msgid "Shortcuts"
+#~ msgstr "Raccourcis"
 
 #~ msgid "Desktop-files-editor"
 #~ msgstr "Desktop Files Editor"

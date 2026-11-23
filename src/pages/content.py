@@ -27,6 +27,9 @@ class Content(Adw.NavigationPage):
     # forms
     entry_app_name: Adw.EntryRow = Gtk.Template.Child()
     entry_app_icon: Adw.EntryRow = Gtk.Template.Child()
+    entry_comment: Adw.EntryRow = Gtk.Template.Child()
+    entry_exec_command: Adw.EntryRow = Gtk.Template.Child()
+    switch_is_hidden: Adw.SwitchRow = Gtk.Template.Child()
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -66,6 +69,9 @@ class Content(Adw.NavigationPage):
         return (
             self.entry_app_name.get_text() != self.selected_desktop.app_name
             or self.entry_app_icon.get_text() != self.selected_desktop.app_icon
+            or self.entry_comment.get_text() != self.selected_desktop.comment
+            or self.entry_exec_command.get_text() != self.selected_desktop.exec_command
+            or self.switch_is_hidden.get_active() != self.selected_desktop.is_hidden
         )
 
     @Gtk.Template.Callback()  # trigger on all entryRow
@@ -74,17 +80,26 @@ class Content(Adw.NavigationPage):
 
     @Gtk.Template.Callback()  # called by the save button
     def save_modifications(self, *_args):
+        if not self.has_changes:
+            return
+
         desktop_model_to_save = DesktopModel(
             desktop_file_path=self.selected_desktop.desktop_file_path,
             app_name=self.entry_app_name.get_text(),
             app_icon=self.entry_app_icon.get_text(),
-            is_hidden=self.selected_desktop.is_hidden,
+            comment=self.entry_comment.get_text(),
+            exec_command=self.entry_exec_command.get_text(),
+            is_hidden=self.switch_is_hidden.get_active(),
             path_to_desktop_in_system=self.selected_desktop.path_to_desktop_in_system,
         )
 
         # save the file
         try:
             new_desktop_path = save_model(desktop_model_to_save)
+        except ValueError:
+            toast = Adw.Toast(title=_("'Name' and 'Command' are required"))
+            self.get_root().show_toast(toast)  # pyright: ignore[reportOptionalMemberAccess, reportAttributeAccessIssue]
+            return
         except Exception:
             logger.exception("failed to save %s modifications", self.selected_desktop.app_name)
             toast = Adw.Toast(title=_("Fail to save modification"))

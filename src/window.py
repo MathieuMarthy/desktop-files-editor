@@ -29,6 +29,7 @@ class DesktopFilesEditorWindow(Adw.ApplicationWindow):
 
     toast_overlay: Adw.ToastOverlay = Gtk.Template.Child()
     sidebar: Sidebar = Gtk.Template.Child()
+    content: Content = Gtk.Template.Child()
 
     def show_toast(self, toast: Adw.Toast) -> None:
         self.toast_overlay.add_toast(toast)

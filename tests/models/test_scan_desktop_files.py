@@ -87,7 +87,33 @@ def test_load_complete_file(tmp_path, make_desktop_file):
 def test_load_without_icon(tmp_path, make_desktop_file):
     path = make_desktop_file(tmp_path, content="[Desktop Entry]\nName=App\n")
 
-    assert load_valid(path).app_icon == ""
+    model = load_valid(path)
+    assert model.app_icon == ""
+    assert model.comment == ""
+    assert model.exec_command == ""
+    assert model.is_hidden is False
+
+
+def test_load_comment_exec_and_hidden(tmp_path, make_desktop_file, monkeypatch):
+    monkeypatch.setenv("LANGUAGE", "fr")
+    content = (
+        "[Desktop Entry]\nName=A\nComment=Browser\nComment[fr]=Navigateur\n"
+        "Exec=a %u\nNoDisplay=true\n"
+    )
+    path = make_desktop_file(tmp_path, content=content)
+
+    model = load_valid(path)
+
+    assert model.comment == "Navigateur"
+    assert model.exec_command == "a %u"
+    assert model.is_hidden is True
+
+
+@pytest.mark.parametrize("line", ["Exec=a\\", "Comment=b\\q", "NoDisplay=yes"])
+def test_load_badly_written_value(tmp_path, make_desktop_file, line):
+    path = make_desktop_file(tmp_path, content=f"[Desktop Entry]\nName=App\n{line}\n")
+
+    assert load(path) is None
 
 
 def test_load_without_name(tmp_path, make_desktop_file):

@@ -14,6 +14,8 @@ class DesktopModel(GObject.Object):
 
     app_name = GObject.Property(type=str, default="")
     app_icon = GObject.Property(type=str, default="")
+    comment = GObject.Property(type=str, default="")
+    exec_command = GObject.Property(type=str, default="")
     is_hidden = GObject.Property(type=bool, default=False)
 
     @property

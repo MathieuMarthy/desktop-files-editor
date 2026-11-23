@@ -43,7 +43,7 @@ configure_file(
     configuration: conf,
     install: true,
     install_dir: get_option('bindir'),
-    install_mode: 'rwxr-xr-x'
+    install_mode: 'rwxr-xr-x',
 )
 
 desktop_files_editor_sources = [

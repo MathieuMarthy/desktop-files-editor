@@ -46,6 +46,7 @@ class DesktopFilesEditorApplication(Adw.Application):
         self.create_action("about", self.on_about_action)
         self.create_action("preferences", self.on_preferences_action)
         self.create_action("search", self.on_search_action, ["<control>f"])
+        self.create_action("save", self.on_save_action, ["<control>s"])
 
     def do_startup(self):
         Adw.Application.do_startup(self)
@@ -93,6 +94,10 @@ class DesktopFilesEditorApplication(Adw.Application):
 
         is_search_mode_active = search_bar.get_search_mode()
         search_bar.set_search_mode(not is_search_mode_active)
+
+    def on_save_action(self, *_):
+        if self.props.active_window is not None:
+            self.props.active_window.content.save_modifications()  # type: ignore
 
     def create_action(self, name, callback, shortcuts=None):
         """Add an application action.

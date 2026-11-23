@@ -61,6 +61,16 @@ template $DesktopFilesEditorContent: Adw.NavigationPage {
             changed => $on_field_change();
           }
 
+          Adw.EntryRow entry_comment {
+            title: _("Comment");
+            text: bind template.selected-desktop as <$DesktopFilesEditorDesktopModel>.comment;
+            changed => $on_field_change();
+          }
+        }
+
+        Adw.PreferencesGroup {
+          title: _("Technical");
+
           Adw.ActionRow {
             title: _("Path");
             subtitle: bind template.selected-desktop as <$DesktopFilesEditorDesktopModel>.desktop-file-path;
@@ -76,6 +86,18 @@ template $DesktopFilesEditorContent: Adw.NavigationPage {
                 "flat",
               ]
             }
+          }
+
+          Adw.EntryRow entry_exec_command {
+            title: _("Command");
+            text: bind template.selected-desktop as <$DesktopFilesEditorDesktopModel>.exec-command;
+            changed => $on_field_change();
+          }
+
+          Adw.SwitchRow switch_is_hidden {
+            title: _("Is hidden");
+            active: bind template.selected-desktop as <$DesktopFilesEditorDesktopModel>.is-hidden;
+            notify::active => $on_field_change();
           }
         }
       }
