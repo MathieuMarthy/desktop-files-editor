@@ -1,6 +1,37 @@
-# desktop-files-editor
+<div align="center">
 
-An app to list and edit .desktop files on Linux
+
+<p align="center">
+  <img src="assets/icon.png" alt="" width="96" height="96">
+</p>
+
+# Desktop Files Editor
+
+![Desktop Files Editor](assets/promo.png)
+
+</div>
+
+Desktop Files Editor lists every app of your Linux launcher and lets you edit its
+.desktop file in a clean GTK4/libadwaita interface. No more hunting for files across
+folders.
+
+## Installation
+
+Download `desktop-files-editor.flatpak` from the
+[latest release](https://github.com/MathieuMarthy/desktop-files-editor/releases/latest),
+then install it:
+
+```sh
+flatpak install --user desktop-files-editor.flatpak
+flatpak run net.dzqdzq.DesktopFilesEditor
+```
+
+The app relies on the GNOME runtime from [Flathub](https://flathub.org/setup).
+If Flathub is not set up yet:
+
+```sh
+flatpak remote-add --user --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
+```
 
 ## Development
 
@@ -58,3 +89,7 @@ See [po/README.md](po/README.md).
 PRs are welcome!
 
 Make sure the tests pass and the code is formatted before opening one.
+
+## License
+
+[GPL-3.0-or-later](COPYING)
