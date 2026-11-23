@@ -34,7 +34,9 @@ class Sidebar(Adw.NavigationPage):
     def refresh_list(self):
         self.store.remove_all()
 
-        for model in scan_desktop_files():
+        models = scan_desktop_files()
+        models = sorted(models, key=lambda model: model.app_name)
+        for model in models:
             self.store.append(model)
 
     def _create_row(self, model: DesktopModel) -> Gtk.Widget:
