@@ -214,12 +214,45 @@ def test_scan_returns_user_files_first(directories, make_desktop_file):
     assert names == ["User", "System"]
 
 
-def test_scan_keeps_duplicates(directories, make_desktop_file):
-    # Current behaviour: a user file does not hide the system file of the same name yet.
+def test_scan_user_file_hides_system_file(directories, make_desktop_file):
     user_dir, (system_dir, _) = directories
+    user_file = make_desktop_file(user_dir, "firefox.desktop", "[Desktop Entry]\nName=Custom\n")
+    system_file = make_desktop_file(
+        system_dir, "firefox.desktop", "[Desktop Entry]\nName=Firefox\n"
+    )
+
+    models = scan_desktop_files()
+
+    assert [model.app_name for model in models] == ["Custom"]
+    assert models[0].desktop_file_path == str(user_file)
+    assert models[0].path_to_desktop_in_system == str(system_file)
+
+
+def test_scan_user_file_links_the_first_system_file(directories, make_desktop_file):
+    user_dir, (system_dir, flatpak_dir) = directories
     make_desktop_file(user_dir, "firefox.desktop", "[Desktop Entry]\nName=Custom\n")
-    make_desktop_file(system_dir, "firefox.desktop", "[Desktop Entry]\nName=Firefox\n")
+    system_file = make_desktop_file(system_dir, "firefox.desktop", "[Desktop Entry]\nName=A\n")
+    make_desktop_file(flatpak_dir, "firefox.desktop", "[Desktop Entry]\nName=B\n")
 
-    names = [model.app_name for model in scan_desktop_files()]
+    models = scan_desktop_files()
 
-    assert names == ["Custom", "Firefox"]
+    assert len(models) == 1
+    assert models[0].path_to_desktop_in_system == str(system_file)
+
+
+def test_scan_system_duplicates_keep_the_first_without_link(directories, make_desktop_file):
+    _, (system_dir, flatpak_dir) = directories
+    make_desktop_file(system_dir, "firefox.desktop", "[Desktop Entry]\nName=First\n")
+    make_desktop_file(flatpak_dir, "firefox.desktop", "[Desktop Entry]\nName=Second\n")
+
+    models = scan_desktop_files()
+
+    assert [model.app_name for model in models] == ["First"]
+    assert models[0].path_to_desktop_in_system == ""
+
+
+def test_scan_file_without_duplicate_has_no_link(directories, make_desktop_file):
+    user_dir, _ = directories
+    make_desktop_file(user_dir)
+
+    assert scan_desktop_files()[0].path_to_desktop_in_system == ""

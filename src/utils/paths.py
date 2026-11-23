@@ -27,10 +27,13 @@ def user_applications_dir() -> Path:
 
 
 def system_applications_dirs() -> list[Path]:
+    # Same priority order as the desktop (XDG_DATA_DIRS): the first one wins on duplicates.
+    # The host XDG_DATA_DIRS is not visible from the sandbox, so the usual order is hardcoded.
     return [
-        host_path("/usr/share/applications"),
-        Path("/var/lib/flatpak/exports/share/applications"),
         user_data_dir() / "flatpak/exports/share/applications",
+        Path("/var/lib/flatpak/exports/share/applications"),
+        host_path("/usr/local/share/applications"),
+        host_path("/usr/share/applications"),
     ]
 
 
@@ -42,3 +45,7 @@ def icon_search_dirs() -> list[Path]:
         host_path("/usr/share/icons"),
         host_path("/usr/share/pixmaps"),
     ]
+
+
+def is_in_user_applications_dir(path: str | Path) -> bool:
+    return Path(path).is_relative_to(user_applications_dir())

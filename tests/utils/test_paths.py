@@ -4,8 +4,6 @@ import pytest
 
 from src.utils import paths
 
-FLATPAK_SYSTEM_EXPORTS = Path("/var/lib/flatpak/exports/share/applications")
-
 
 @pytest.fixture(autouse=True)
 def clean_env(monkeypatch):
@@ -68,30 +66,27 @@ def test_flatpak_user_dir_ignores_empty_host_xdg_data_home(monkeypatch, home):
 # system_applications_dirs
 
 
-def test_system_dirs_outside_flatpak(monkeypatch):
-    monkeypatch.setattr(paths, "IN_FLATPAK", False)
-
-    assert paths.system_applications_dirs()[0] == Path("/usr/share/applications")
-
-
-def test_system_dirs_inside_flatpak(monkeypatch):
-    monkeypatch.setattr(paths, "IN_FLATPAK", True)
-
-    assert paths.system_applications_dirs()[0] == Path("/run/host/usr/share/applications")
-
-
-@pytest.mark.parametrize("in_flatpak", [True, False])
-def test_system_dirs_contain_flatpak_system_exports(monkeypatch, in_flatpak):
-    monkeypatch.setattr(paths, "IN_FLATPAK", in_flatpak)
-
-    assert FLATPAK_SYSTEM_EXPORTS in paths.system_applications_dirs()
-
-
-def test_system_dirs_contain_flatpak_user_exports(monkeypatch):
+def test_system_dirs_outside_flatpak_in_priority_order(monkeypatch):
     monkeypatch.setenv("XDG_DATA_HOME", "/custom/data")
 
-    expected = Path("/custom/data/flatpak/exports/share/applications")
-    assert expected in paths.system_applications_dirs()
+    assert paths.system_applications_dirs() == [
+        Path("/custom/data/flatpak/exports/share/applications"),
+        Path("/var/lib/flatpak/exports/share/applications"),
+        Path("/usr/local/share/applications"),
+        Path("/usr/share/applications"),
+    ]
+
+
+def test_system_dirs_inside_flatpak_in_priority_order(monkeypatch):
+    monkeypatch.setattr(paths, "IN_FLATPAK", True)
+    monkeypatch.setenv("HOST_XDG_DATA_HOME", "/custom/data")
+
+    assert paths.system_applications_dirs() == [
+        Path("/custom/data/flatpak/exports/share/applications"),
+        Path("/var/lib/flatpak/exports/share/applications"),
+        Path("/run/host/usr/local/share/applications"),
+        Path("/run/host/usr/share/applications"),
+    ]
 
 
 # host_path
@@ -130,3 +125,18 @@ def test_icon_dirs_inside_flatpak(monkeypatch):
         Path("/run/host/usr/share/icons"),
         Path("/run/host/usr/share/pixmaps"),
     ]
+
+
+# is_in_user_applications_dir
+
+
+def test_path_in_user_applications_dir(monkeypatch):
+    monkeypatch.setenv("XDG_DATA_HOME", "/custom/data")
+
+    assert paths.is_in_user_applications_dir("/custom/data/applications/firefox.desktop")
+
+
+def test_path_outside_user_applications_dir(monkeypatch):
+    monkeypatch.setenv("XDG_DATA_HOME", "/custom/data")
+
+    assert not paths.is_in_user_applications_dir("/usr/share/applications/firefox.desktop")

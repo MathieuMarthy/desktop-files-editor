@@ -30,8 +30,12 @@ class Sidebar(Adw.NavigationPage):
 
     def _create_row(self, model: DesktopModel) -> Gtk.Widget:
         row = Adw.ActionRow(title=model.app_name, use_markup=False)
+        model.bind_property("app-name", row, "title", GObject.BindingFlags.SYNC_CREATE)
+
         icon = Gtk.Image(pixel_size=32)
         set_app_icon(icon, model.app_icon)
+        model.connect("notify::app-icon", lambda m, _pspec: set_app_icon(icon, m.app_icon))
+
         row.add_prefix(icon)
         return row
 
