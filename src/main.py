@@ -44,9 +44,12 @@ class DesktopFilesEditorApplication(Adw.Application):
         )
         self.create_action("quit", lambda *_: self.quit(), ["<control>q"])
         self.create_action("about", self.on_about_action)
-        self.create_action("preferences", self.on_preferences_action)
         self.create_action("search", self.on_search_action, ["<control>f"])
         self.create_action("save", self.on_save_action, ["<control>s"])
+
+        self.settings = Gio.Settings(schema_id="net.dzqdzq.DesktopFilesEditor")
+        self.add_action(self.settings.create_action("show-hidden-apps"))
+        self.set_accels_for_action("app.show-hidden-apps", ["<control>h"])
 
     def do_startup(self):
         Adw.Application.do_startup(self)
@@ -75,7 +78,7 @@ class DesktopFilesEditorApplication(Adw.Application):
         about = Adw.AboutDialog(
             application_name="Desktop-files-editor",
             application_icon="net.dzqdzq.DesktopFilesEditor",
-            developer_name="mathieu",
+            developer_name="Mathieu Marthy",
             version="0.1.0",
             # Translators: Replace "translator-credits" with your name/username,
             # and optionally an email or URL.
@@ -84,10 +87,6 @@ class DesktopFilesEditorApplication(Adw.Application):
             copyright="© 2026 Mathieu Marthy",
         )
         about.present(self.props.active_window)
-
-    def on_preferences_action(self, widget, _):
-        """Callback for the app.preferences action."""
-        pass
 
     def on_search_action(self, *_):
         search_bar: Gtk.SearchBar = self.props.active_window.sidebar.search_bar  # type: ignore

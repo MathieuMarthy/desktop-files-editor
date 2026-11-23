@@ -1,3 +1,5 @@
+from gettext import gettext as _
+
 from gi.repository import Adw, Gio, GObject, Gtk
 
 from ..models.desktop_model import DesktopModel
@@ -20,6 +22,10 @@ class Sidebar(Adw.NavigationPage):
 
         self.store = Gio.ListStore(item_type=DesktopModel)
         self.list_box.bind_model(self.store, self._create_row)
+        self.settings = Gio.Settings(schema_id="net.dzqdzq.DesktopFilesEditor")
+        self.settings.connect(
+            "changed::show-hidden-apps", lambda *_: self.list_box.invalidate_filter()
+        )
 
         self.list_box.set_filter_func(self._filter)
 
@@ -29,11 +35,14 @@ class Sidebar(Adw.NavigationPage):
         self.store.remove_all()
 
         for model in scan_desktop_files():
-            if not model.is_hidden:
-                self.store.append(model)
+            self.store.append(model)
 
     def _create_row(self, model: DesktopModel) -> Gtk.Widget:
-        row = Adw.ActionRow(title=model.app_name, use_markup=False)
+        row = Adw.ActionRow(
+            title=model.app_name,
+            subtitle=(_("Hidden") if model.is_hidden else ""),
+            use_markup=False,
+        )
         model.bind_property("app-name", row, "title", GObject.BindingFlags.SYNC_CREATE)
 
         icon = Gtk.Image(pixel_size=32)
@@ -56,4 +65,9 @@ class Sidebar(Adw.NavigationPage):
         self.list_box.invalidate_filter()
 
     def _filter(self, row: Adw.ActionRow) -> bool:
+        model = self.store.get_item(row.get_index())
+
+        if model is None or (model.is_hidden and not self.settings.get_boolean("show-hidden-apps")):
+            return False
+
         return self.search_entry.get_text().lower().strip() in row.get_title().lower()
