@@ -1,6 +1,6 @@
 # window.py
 #
-# Copyright 2026 mathieu
+# Copyright 2026 Mathieu Marthy
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by

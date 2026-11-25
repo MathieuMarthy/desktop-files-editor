@@ -1,7 +1,7 @@
 {
     "id": "net.dzqdzq.DesktopFilesEditor",
     "runtime": "org.gnome.Platform",
-    "runtime-version": "50",
+    "runtime-version": "51",
     "sdk": "org.gnome.Sdk",
     "command": "desktop-files-editor",
     "finish-args": [
@@ -41,7 +41,8 @@
                 {
                     "type": "git",
                     "url": "https://gitlab.gnome.org/GNOME/blueprint-compiler",
-                    "tag": "v0.22.2"
+                    "tag": "v0.22.2",
+                    "commit": "ed35ac74de0c1bb1f5e852410b97edd1f08904c9"
                 }
             ]
         },
