@@ -100,6 +100,16 @@ template $DesktopFilesEditorContent: Adw.NavigationPage {
             notify::active => $on_field_change();
           }
         }
+
+        Adw.PreferencesGroup {
+          Adw.ButtonRow button_delete {
+            activated => $on_delete();
+
+            styles [
+              "destructive-action",
+            ]
+          }
+        }
       }
     };
   };

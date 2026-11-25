@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: desktop-files-editor\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-24 22:35-0500\n"
-"PO-Revision-Date: 2026-11-24 22:42-0500\n"
+"POT-Creation-Date: 2026-11-24 23:11-0500\n"
+"PO-Revision-Date: 2026-11-24 23:16-0500\n"
 "Last-Translator: Mathieu Marthy <mathieu.marthy@pm.me>\n"
 "Language-Team: French\n"
 "Language: fr\n"
@@ -101,25 +101,54 @@ msgstr "Commande"
 msgid "Hide this application"
 msgstr "Cacher cette application"
 
-#: src/pages/content.py:65
+#: src/pages/content.py:72
 msgid "Path copied to clipboard"
 msgstr "Chemin copié dans le presse papier"
 
-#: src/pages/content.py:104
+#: src/pages/content.py:111
 msgid "An application with this file name already exists"
 msgstr "Une application avec ce nom existe déjà"
 
-#: src/pages/content.py:108
+#: src/pages/content.py:115
 msgid "'Name' and 'Command' are required"
 msgstr "'Nom' et 'Commande' sont obligatoires"
 
-#: src/pages/content.py:113
+#: src/pages/content.py:120
 msgid "Fail to save modification"
 msgstr "Erreur lors de la sauvegarde"
 
-#: src/pages/content.py:126
+#. a saved system file is now a user copy
+#: src/pages/content.py:134
 msgid "Modifications saved"
 msgstr "Modifications enregistrées"
+
+#: src/pages/content.py:164
+msgid "Restore Original"
+msgstr "Restaurer l'original"
+
+#: src/pages/content.py:166
+msgid "Delete Application"
+msgstr "Supprimer l'application"
+
+#: src/pages/content.py:180
+msgid "Fail to delete the application"
+msgstr "Impossible de supprimer l'application"
+
+#: src/pages/content.py:188
+msgid "Original restored"
+msgstr "Version originale restaurée"
+
+#: src/pages/content.py:191
+msgid "Application deleted"
+msgstr "Application supprimée"
+
+#: src/pages/content.py:193
+msgid "Undo"
+msgstr "Annuler"
+
+#: src/pages/content.py:204
+msgid "Fail to restore the application"
+msgstr "Impossible de restaure l'application"
 
 #: src/pages/sidebar.blp:5 src/shortcuts-dialog.blp:20
 msgid "Applications"

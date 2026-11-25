@@ -43,6 +43,11 @@ class Sidebar(Adw.NavigationPage):
         position = self.store.insert_sorted(model, _compare_names)
         self.list_box.select_row(self.list_box.get_row_at_index(position))  # pyright: ignore[reportArgumentType]
 
+    def remove(self, model: DesktopModel) -> None:
+        found, position = self.store.find(model)
+        if found:
+            self.store.remove(position)
+
     def _create_row(self, model: DesktopModel) -> Gtk.Widget:
         row = Adw.ActionRow(
             title=model.app_name,

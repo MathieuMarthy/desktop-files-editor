@@ -13,6 +13,7 @@ template $DesktopFilesEditorWindow: Adw.ApplicationWindow {
       content: $DesktopFilesEditorContent content {
         selected-desktop: bind sidebar.selected-desktop;
         app-created => $on_app_created();
+        app-deleted => $on_app_deleted();
       };
     };
   };

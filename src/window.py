@@ -38,3 +38,7 @@ class DesktopFilesEditorWindow(Adw.ApplicationWindow):
     @Gtk.Template.Callback()
     def on_app_created(self, _content, model: DesktopModel) -> None:
         self.sidebar.add_and_select(model)
+
+    @Gtk.Template.Callback()
+    def on_app_deleted(self, _content, model: DesktopModel) -> None:
+        self.sidebar.remove(model)

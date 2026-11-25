@@ -1,9 +1,11 @@
 import logging
 import re
 from gettext import gettext as _
+from pathlib import Path
 
 from gi.repository import Adw, GLib, GObject, Gtk
 
+from ..models.delete_model import delete_model
 from ..models.desktop_model import DesktopModel
 from ..models.save_model import save_model
 from ..utils.display_image import set_app_icon
@@ -15,7 +17,10 @@ logger = logging.getLogger(__name__)
 @Gtk.Template(resource_path="/net/dzqdzq/DesktopFilesEditor/pages/content.ui")
 class Content(Adw.NavigationPage):
     __gtype_name__ = "DesktopFilesEditorContent"
-    __gsignals__ = {"app-created": (GObject.SignalFlags.RUN_FIRST, None, (DesktopModel,))}
+    __gsignals__ = {
+        "app-created": (GObject.SignalFlags.RUN_FIRST, None, (DesktopModel,)),
+        "app-deleted": (GObject.SignalFlags.RUN_FIRST, None, (DesktopModel,)),
+    }
 
     selected_desktop = GObject.Property(type=DesktopModel)
     has_changes = GObject.Property(type=bool, default=False)
@@ -26,6 +31,7 @@ class Content(Adw.NavigationPage):
     empty_page: Adw.StatusPage = Gtk.Template.Child()
     editor_page: Adw.PreferencesPage = Gtk.Template.Child()
     button_save: Gtk.Button = Gtk.Template.Child()
+    button_delete: Adw.ButtonRow = Gtk.Template.Child()
 
     # forms
     entry_app_name: Adw.EntryRow = Gtk.Template.Child()
@@ -42,6 +48,7 @@ class Content(Adw.NavigationPage):
 
     def _on_selected_desktop_changed(self, *_args):
         self.button_save.set_visible(self.selected_desktop is not None)
+        self._update_delete_button()
 
         if self._icon_watch is not None:
             model, handler_id = self._icon_watch
@@ -122,6 +129,7 @@ class Content(Adw.NavigationPage):
             desktop_model_to_save.path_to_desktop_in_system = old_path
 
         self.selected_desktop.update_from(desktop_model_to_save)
+        self._update_delete_button()  # a saved system file is now a user copy
 
         toast = Adw.Toast(title=_("Modifications saved"))
         self.get_root().show_toast(toast)  # pyright: ignore[reportOptionalMemberAccess, reportAttributeAccessIssue]
@@ -146,3 +154,58 @@ class Content(Adw.NavigationPage):
                 unique_path(user_applications_dir() / f"{slug}.desktop")
             )
         self.on_field_change()
+
+    def _update_delete_button(self):
+        model = self.selected_desktop
+        self.button_delete.set_visible(
+            model is not None and model.file_in_users_files and not model.new_app
+        )
+        if model is not None and model.path_to_desktop_in_system:
+            self.button_delete.set_title(_("Restore Original"))
+        else:
+            self.button_delete.set_title(_("Delete Application"))
+
+    @Gtk.Template.Callback()  # called by the delete button
+    def on_delete(self, _row):
+        model = self.selected_desktop
+        if model is None:
+            return
+
+        before = DesktopModel()
+        before.update_from(model)
+        try:
+            backup, original = delete_model(model)
+        except Exception:
+            logger.exception("failed to delete %s", model.desktop_file_path)
+            toast = Adw.Toast(title=_("Fail to delete the application"))
+            self.get_root().show_toast(toast)  # pyright: ignore[reportOptionalMemberAccess, reportAttributeAccessIssue]
+            return
+
+        if original is not None:
+            # the system app is visible again: the row stays, with the system values
+            model.update_from(original)
+            self._update_delete_button()
+            title = _("Original restored")
+        else:
+            self.emit("app-deleted", model)
+            title = _("Application deleted")
+
+        toast = Adw.Toast(title=title, button_label=_("Undo"))
+        toast.connect(
+            "button-clicked", lambda _t: self._undo_delete(model, before, backup, original is None)
+        )
+        self.get_root().show_toast(toast)  # pyright: ignore[reportOptionalMemberAccess, reportAttributeAccessIssue]
+
+    def _undo_delete(self, model: DesktopModel, before: DesktopModel, backup: bytes, removed: bool):
+        try:
+            Path(before.desktop_file_path).write_bytes(backup)
+        except OSError:
+            logger.exception("failed to restore %s", before.desktop_file_path)
+            toast = Adw.Toast(title=_("Fail to restore the application"))
+            self.get_root().show_toast(toast)  # pyright: ignore[reportOptionalMemberAccess, reportAttributeAccessIssue]
+            return
+
+        model.update_from(before)
+        self._update_delete_button()
+        if removed:
+            self.emit("app-created", model)  # re-inserts and selects it in the sidebar

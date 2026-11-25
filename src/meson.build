@@ -50,6 +50,7 @@ desktop_files_editor_sources = [
     '__init__.py',
     'main.py',
     'models/__init__.py',
+    'models/delete_model.py',
     'models/desktop_model.py',
     'models/save_model.py',
     'models/scan_desktop_files.py',
