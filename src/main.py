@@ -29,6 +29,7 @@ gi.require_version("Adw", "1")
 
 from gi.repository import Adw, Gdk, Gio, Gtk  # noqa: E402
 
+from .models.desktop_model import DesktopModel  # noqa: E402
 from .utils.paths import icon_search_dirs  # noqa: E402
 from .window import DesktopFilesEditorWindow  # noqa: E402
 
@@ -46,6 +47,7 @@ class DesktopFilesEditorApplication(Adw.Application):
         self.create_action("about", self.on_about_action)
         self.create_action("search", self.on_search_action, ["<control>f"])
         self.create_action("save", self.on_save_action, ["<control>s"])
+        self.create_action("new-app", self.on_new_app_action, ["<control>n"])
 
         self.settings = Gio.Settings(schema_id="net.dzqdzq.DesktopFilesEditor")
         self.add_action(self.settings.create_action("show-hidden-apps"))
@@ -97,6 +99,13 @@ class DesktopFilesEditorApplication(Adw.Application):
     def on_save_action(self, *_):
         if self.props.active_window is not None:
             self.props.active_window.content.save_modifications()  # type: ignore
+
+    def on_new_app_action(self, *_):
+        if self.props.active_window is None:
+            return
+
+        self.props.active_window.sidebar.list_box.unselect_all()  # pyright: ignore[reportAttributeAccessIssue]
+        self.props.active_window.sidebar.selected_desktop = DesktopModel(new_app=True)  # pyright: ignore[reportAttributeAccessIssue]
 
     def create_action(self, name, callback, shortcuts=None):
         """Add an application action.

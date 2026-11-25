@@ -52,7 +52,7 @@ template $DesktopFilesEditorContent: Adw.NavigationPage {
           Adw.EntryRow entry_app_name {
             title: _("Name");
             text: bind template.selected-desktop as <$DesktopFilesEditorDesktopModel>.app-name;
-            changed => $on_field_change();
+            changed => $on_name_change();
           }
 
           Adw.EntryRow entry_app_icon {
@@ -95,7 +95,7 @@ template $DesktopFilesEditorContent: Adw.NavigationPage {
           }
 
           Adw.SwitchRow switch_is_hidden {
-            title: _("Is hidden");
+            title: _("Hide this application");
             active: bind template.selected-desktop as <$DesktopFilesEditorDesktopModel>.is-hidden;
             notify::active => $on_field_change();
           }

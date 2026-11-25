@@ -49,3 +49,14 @@ def icon_search_dirs() -> list[Path]:
 
 def is_in_user_applications_dir(path: str | Path) -> bool:
     return Path(path).is_relative_to(user_applications_dir())
+
+
+def unique_path(path: Path) -> Path:
+    """First free name (name, name-1, name-2...) in every applications folder:
+    a new file must neither overwrite nor override an existing app."""
+    folders = [user_applications_dir(), *system_applications_dirs()]
+    candidate, count = path, 1
+    while any((folder / candidate.name).exists() for folder in folders):
+        candidate = path.with_name(f"{path.stem}-{count}{path.suffix}")
+        count += 1
+    return candidate

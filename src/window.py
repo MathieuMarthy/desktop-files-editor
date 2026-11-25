@@ -19,6 +19,7 @@
 
 from gi.repository import Adw, Gtk
 
+from .models.desktop_model import DesktopModel
 from .pages.content import Content  # noqa: F401
 from .pages.sidebar import Sidebar  # noqa: F401
 
@@ -33,3 +34,7 @@ class DesktopFilesEditorWindow(Adw.ApplicationWindow):
 
     def show_toast(self, toast: Adw.Toast) -> None:
         self.toast_overlay.add_toast(toast)
+
+    @Gtk.Template.Callback()
+    def on_app_created(self, _content, model: DesktopModel) -> None:
+        self.sidebar.add_and_select(model)

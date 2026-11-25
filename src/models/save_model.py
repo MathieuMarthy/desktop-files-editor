@@ -19,10 +19,14 @@ def save_model(desktop_model: DesktopModel) -> str:
         (str): path where the desktop model has been saved
     """
     key_file = GLib.KeyFile()
-    key_file.load_from_file(
-        desktop_model.desktop_file_path,
-        GLib.KeyFileFlags.KEEP_COMMENTS | GLib.KeyFileFlags.KEEP_TRANSLATIONS,
-    )
+
+    if desktop_model.new_app:
+        key_file.set_string(KEYFILE_GROUP, "Type", "Application")
+    else:
+        key_file.load_from_file(
+            desktop_model.desktop_file_path,
+            GLib.KeyFileFlags.KEEP_COMMENTS | GLib.KeyFileFlags.KEEP_TRANSLATIONS,
+        )
 
     existing_keys = key_file.get_keys(KEYFILE_GROUP)[0]
     for key, prop in STRING_KEYS.items():
@@ -30,7 +34,7 @@ def save_model(desktop_model: DesktopModel) -> str:
 
         if value:
             _set_string(key_file, key, value)
-        elif key in existing_keys and key in REQUIRED_KEYS:
+        elif key in REQUIRED_KEYS and (key in existing_keys or desktop_model.new_app):
             logging.warning(f"can't save: {key} cannot be empty")
             raise ValueError(f"{key} cannot be empty")
         else:
@@ -48,6 +52,9 @@ def save_model(desktop_model: DesktopModel) -> str:
         user_dir = user_applications_dir()
         user_dir.mkdir(parents=True, exist_ok=True)
         path = user_dir / path.name
+
+    if desktop_model.new_app and path.exists():
+        raise FileExistsError("File already exists")
 
     key_file.save_to_file(str(path))
     logger.info(".desktop file of %s saved at %s", desktop_model.app_name, path)

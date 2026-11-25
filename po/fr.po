@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: desktop-files-editor\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-23 15:21-0500\n"
-"PO-Revision-Date: 2026-11-23 15:23-0500\n"
+"POT-Creation-Date: 2026-11-24 22:35-0500\n"
+"PO-Revision-Date: 2026-11-24 22:42-0500\n"
 "Last-Translator: Mathieu Marthy <mathieu.marthy@pm.me>\n"
 "Language-Team: French\n"
 "Language: fr\n"
@@ -45,7 +45,7 @@ msgstr ""
 
 #. Translators: Replace "translator-credits" with your name/username,
 #. and optionally an email or URL.
-#: src/main.py:85
+#: src/main.py:87
 msgid "translator-credits"
 msgstr "Mathieu Marthy"
 
@@ -98,22 +98,26 @@ msgid "Command"
 msgstr "Commande"
 
 #: src/pages/content.blp:98
-msgid "Is hidden"
-msgstr "Est caché"
+msgid "Hide this application"
+msgstr "Cacher cette application"
 
-#: src/pages/content.py:62
+#: src/pages/content.py:65
 msgid "Path copied to clipboard"
 msgstr "Chemin copié dans le presse papier"
 
-#: src/pages/content.py:100
+#: src/pages/content.py:104
+msgid "An application with this file name already exists"
+msgstr "Une application avec ce nom existe déjà"
+
+#: src/pages/content.py:108
 msgid "'Name' and 'Command' are required"
 msgstr "'Nom' et 'Commande' sont obligatoires"
 
-#: src/pages/content.py:105
+#: src/pages/content.py:113
 msgid "Fail to save modification"
 msgstr "Erreur lors de la sauvegarde"
 
-#: src/pages/content.py:118
+#: src/pages/content.py:126
 msgid "Modifications saved"
 msgstr "Modifications enregistrées"
 
@@ -125,15 +129,19 @@ msgstr "Applications"
 msgid "Main Menu"
 msgstr "Menu principal"
 
-#: src/pages/sidebar.blp:55
+#: src/pages/sidebar.blp:53
+msgid "New app"
+msgstr "Nouvelle app"
+
+#: src/pages/sidebar.blp:69
 msgid "_Show hidden applications"
 msgstr "_Afficher les applications cachées"
 
-#: src/pages/sidebar.blp:60
+#: src/pages/sidebar.blp:74
 msgid "_Keyboard Shortcuts"
 msgstr "_Raccourcis claviers"
 
-#: src/pages/sidebar.blp:65
+#: src/pages/sidebar.blp:79
 msgid "_About Desktop Files Editor"
 msgstr "_À propos de Desktop Files Editor"
 
@@ -156,6 +164,14 @@ msgstr "Rechercher"
 msgctxt "shortcut window"
 msgid "Save"
 msgstr "Enregistrer"
+
+#: src/shortcuts-dialog.blp:33
+msgctxt "shortcut window"
+msgid "New app"
+msgstr "Nouvelle app"
+
+#~ msgid "Is hidden"
+#~ msgstr "Est caché"
 
 #~ msgid "_Preferences"
 #~ msgstr "_Préférences"

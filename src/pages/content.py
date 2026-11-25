@@ -1,11 +1,13 @@
 import logging
+import re
 from gettext import gettext as _
 
-from gi.repository import Adw, GObject, Gtk
+from gi.repository import Adw, GLib, GObject, Gtk
 
 from ..models.desktop_model import DesktopModel
 from ..models.save_model import save_model
 from ..utils.display_image import set_app_icon
+from ..utils.paths import unique_path, user_applications_dir
 
 logger = logging.getLogger(__name__)
 
@@ -13,6 +15,7 @@ logger = logging.getLogger(__name__)
 @Gtk.Template(resource_path="/net/dzqdzq/DesktopFilesEditor/pages/content.ui")
 class Content(Adw.NavigationPage):
     __gtype_name__ = "DesktopFilesEditorContent"
+    __gsignals__ = {"app-created": (GObject.SignalFlags.RUN_FIRST, None, (DesktopModel,))}
 
     selected_desktop = GObject.Property(type=DesktopModel)
     has_changes = GObject.Property(type=bool, default=False)
@@ -91,11 +94,16 @@ class Content(Adw.NavigationPage):
             exec_command=self.entry_exec_command.get_text(),
             is_hidden=self.switch_is_hidden.get_active(),
             path_to_desktop_in_system=self.selected_desktop.path_to_desktop_in_system,
+            new_app=self.selected_desktop.new_app,
         )
 
         # save the file
         try:
             new_desktop_path = save_model(desktop_model_to_save)
+        except FileExistsError:
+            toast = Adw.Toast(title=_("An application with this file name already exists"))
+            self.get_root().show_toast(toast)  # pyright: ignore[reportOptionalMemberAccess, reportAttributeAccessIssue]
+            return
         except ValueError:
             toast = Adw.Toast(title=_("'Name' and 'Command' are required"))
             self.get_root().show_toast(toast)  # pyright: ignore[reportOptionalMemberAccess, reportAttributeAccessIssue]
@@ -117,3 +125,24 @@ class Content(Adw.NavigationPage):
 
         toast = Adw.Toast(title=_("Modifications saved"))
         self.get_root().show_toast(toast)  # pyright: ignore[reportOptionalMemberAccess, reportAttributeAccessIssue]
+
+        if self.selected_desktop.new_app:
+            self.selected_desktop.new_app = False
+            self.emit("app-created", self.selected_desktop)
+
+    @Gtk.Template.Callback()  # called by the name entry
+    def on_name_change(self, _):
+        if self.selected_desktop is None:
+            return
+
+        if self.selected_desktop.new_app:
+            ascii_name = GLib.str_to_ascii(self.entry_app_name.get_text(), None).lower()
+            slug = re.sub(r"[^a-z0-9]+", "-", ascii_name).strip("-")
+
+            if slug == "":
+                slug = "application"
+
+            self.selected_desktop.desktop_file_path = str(
+                unique_path(user_applications_dir() / f"{slug}.desktop")
+            )
+        self.on_field_change()

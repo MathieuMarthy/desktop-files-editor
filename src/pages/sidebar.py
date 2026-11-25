@@ -1,6 +1,6 @@
 from gettext import gettext as _
 
-from gi.repository import Adw, Gio, GObject, Gtk
+from gi.repository import Adw, Gio, GLib, GObject, Gtk
 
 from ..models.desktop_model import DesktopModel
 from ..models.scan_desktop_files import scan_desktop_files
@@ -35,9 +35,13 @@ class Sidebar(Adw.NavigationPage):
         self.store.remove_all()
 
         models = scan_desktop_files()
-        models = sorted(models, key=lambda model: model.app_name)
+        models = sorted(models, key=lambda model: GLib.utf8_collate_key(model.app_name, -1))
         for model in models:
             self.store.append(model)
+
+    def add_and_select(self, model: DesktopModel) -> None:
+        position = self.store.insert_sorted(model, _compare_names)
+        self.list_box.select_row(self.list_box.get_row_at_index(position))  # pyright: ignore[reportArgumentType]
 
     def _create_row(self, model: DesktopModel) -> Gtk.Widget:
         row = Adw.ActionRow(
@@ -73,3 +77,8 @@ class Sidebar(Adw.NavigationPage):
             return False
 
         return self.search_entry.get_text().lower().strip() in row.get_title().lower()
+
+
+def _compare_names(a: DesktopModel, b: DesktopModel, *_user_data) -> int:
+    """Sort by name in the user's language: case and accents don't push names to the end."""
+    return GLib.utf8_collate(a.app_name, b.app_name)

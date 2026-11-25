@@ -140,3 +140,50 @@ def test_path_outside_user_applications_dir(monkeypatch):
     monkeypatch.setenv("XDG_DATA_HOME", "/custom/data")
 
     assert not paths.is_in_user_applications_dir("/usr/share/applications/firefox.desktop")
+
+
+# unique_path
+
+
+@pytest.fixture
+def app_dirs(monkeypatch, tmp_path):
+    """User folder and one system folder, both temporary."""
+    monkeypatch.setenv("XDG_DATA_HOME", str(tmp_path / "data"))
+    system_dir = tmp_path / "system"
+    monkeypatch.setattr(paths, "system_applications_dirs", lambda: [system_dir])
+    return paths.user_applications_dir(), system_dir
+
+
+def touch(directory: Path, name: str) -> None:
+    directory.mkdir(parents=True, exist_ok=True)
+    (directory / name).touch()
+
+
+def test_unique_path_keeps_a_free_name(app_dirs):
+    user_dir, _ = app_dirs
+
+    assert paths.unique_path(user_dir / "app.desktop") == user_dir / "app.desktop"
+
+
+def test_unique_path_skips_a_name_taken_in_the_user_folder(app_dirs):
+    user_dir, _ = app_dirs
+    touch(user_dir, "app.desktop")
+
+    assert paths.unique_path(user_dir / "app.desktop") == user_dir / "app-1.desktop"
+
+
+def test_unique_path_skips_a_name_taken_in_a_system_folder(app_dirs):
+    # a user file with this name would override the system app
+    user_dir, system_dir = app_dirs
+    touch(system_dir, "app.desktop")
+
+    assert paths.unique_path(user_dir / "app.desktop") == user_dir / "app-1.desktop"
+
+
+def test_unique_path_skips_every_taken_number(app_dirs):
+    user_dir, system_dir = app_dirs
+    touch(user_dir, "app.desktop")
+    touch(system_dir, "app-1.desktop")
+    touch(user_dir, "app-2.desktop")
+
+    assert paths.unique_path(user_dir / "app.desktop") == user_dir / "app-3.desktop"

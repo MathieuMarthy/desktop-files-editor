@@ -46,6 +46,20 @@ template $DesktopFilesEditorSideBar: Adw.NavigationPage {
         };
       }
     };
+
+    [bottom]
+    Button button_create {
+      child: Adw.ButtonContent {
+        label: _("New app");
+        icon-name: "list-add-symbolic";
+      };
+
+      action-name: "app.new-app";
+      margin-top: 10;
+      margin-bottom: 10;
+      margin-start: 10;
+      margin-end: 10;
+    }
   };
 }
 

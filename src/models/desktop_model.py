@@ -18,6 +18,8 @@ class DesktopModel(GObject.Object):
     exec_command = GObject.Property(type=str, default="")
     is_hidden = GObject.Property(type=bool, default=False)
 
+    new_app = GObject.Property(type=bool, default=False)
+
     @property
     def desktop_filename(self) -> str:
         return Path(self.desktop_file_path).name
