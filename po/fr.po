@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: desktop-files-editor\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-24 23:11-0500\n"
+"POT-Creation-Date: 2026-11-25 00:03-0500\n"
 "PO-Revision-Date: 2026-11-24 23:16-0500\n"
 "Last-Translator: Mathieu Marthy <mathieu.marthy@pm.me>\n"
 "Language-Team: French\n"
@@ -37,11 +37,87 @@ msgstr "Gérer vos fichiers .desktop"
 
 #: data/net.dzqdzq.DesktopFilesEditor.metainfo.xml.in:10
 msgid ""
-"With Desktop Files Editor you can see, edit, add or remove your .desktop "
-"files."
+"Every application in your launcher is described by a .desktop file. Desktop "
+"Files Editor gathers them in one list, so you can change them without "
+"searching through folders or editing text files by hand."
 msgstr ""
-"Avec Desktop Files Editor vous pouvez voir, modifier, ajouter ou retirer vos "
-"fichiers .desktop."
+"Chaque application de votre lanceur est décrite par un fichier .desktop. "
+"Desktop Files Editor les réunit dans une seule liste, pour les modifier sans "
+"fouiller dans des dossiers ni éditer des fichiers texte à la main."
+
+#: data/net.dzqdzq.DesktopFilesEditor.metainfo.xml.in:11
+msgid ""
+"Your user, system and Flatpak applications are all listed. System files are "
+"never modified: when you change one, a copy is saved in your personal "
+"folder, and you can restore the original at any time."
+msgstr ""
+"Vos applications personnelles, système et Flatpak sont toutes listées. Les "
+"fichiers système ne sont jamais modifiés : lorsque vous en changez un, une "
+"copie est enregistrée dans votre dossier personnel, et vous pouvez restaurer "
+"l’original à tout moment."
+
+#: data/net.dzqdzq.DesktopFilesEditor.metainfo.xml.in:12
+msgid "Features:"
+msgstr "Fonctionnalités :"
+
+#: data/net.dzqdzq.DesktopFilesEditor.metainfo.xml.in:14
+msgid "Browse and search all your applications"
+msgstr "Parcourir et rechercher toutes vos applications"
+
+#: data/net.dzqdzq.DesktopFilesEditor.metainfo.xml.in:15
+msgid "Edit the name, icon, comment and command of an application"
+msgstr ""
+"Modifier le nom, l’icône, le commentaire et la commande d’une application"
+
+#: data/net.dzqdzq.DesktopFilesEditor.metainfo.xml.in:16
+msgid "Hide applications from your launcher, and show them again"
+msgstr "Cacher des applications de votre lanceur, puis les réafficher"
+
+#: data/net.dzqdzq.DesktopFilesEditor.metainfo.xml.in:17
+msgid "Create new applications"
+msgstr "Créer de nouvelles applications"
+
+#: data/net.dzqdzq.DesktopFilesEditor.metainfo.xml.in:18
+msgid "Delete your own applications or restore the original ones, with undo"
+msgstr ""
+"Supprimer vos applications ou restaurer les originales, avec possibilité "
+"d’annuler"
+
+#: data/net.dzqdzq.DesktopFilesEditor.metainfo.xml.in:19
+msgid "Copy the path of a .desktop file"
+msgstr "Copier le chemin d’un fichier .desktop"
+
+#: data/net.dzqdzq.DesktopFilesEditor.metainfo.xml.in:20
+msgid "Work faster with keyboard shortcuts"
+msgstr "Gagner du temps grâce aux raccourcis clavier"
+
+#: data/net.dzqdzq.DesktopFilesEditor.metainfo.xml.in:27
+msgid "Editing an application"
+msgstr "Modification d’une application"
+
+#: data/net.dzqdzq.DesktopFilesEditor.metainfo.xml.in:31
+msgid "Dark style"
+msgstr "Style sombre"
+
+#: data/net.dzqdzq.DesktopFilesEditor.metainfo.xml.in:36
+msgid "desktop"
+msgstr "bureau"
+
+#: data/net.dzqdzq.DesktopFilesEditor.metainfo.xml.in:37
+msgid "launcher"
+msgstr "lanceur"
+
+#: data/net.dzqdzq.DesktopFilesEditor.metainfo.xml.in:38
+msgid "shortcut"
+msgstr "raccourci"
+
+#: data/net.dzqdzq.DesktopFilesEditor.metainfo.xml.in:39
+msgid "editor"
+msgstr "éditeur"
+
+#: data/net.dzqdzq.DesktopFilesEditor.metainfo.xml.in:63
+msgid "First release."
+msgstr "Première version."
 
 #. Translators: Replace "translator-credits" with your name/username,
 #. and optionally an email or URL.
@@ -199,6 +275,23 @@ msgctxt "shortcut window"
 msgid "New app"
 msgstr "Nouvelle app"
 
+#~ msgid ""
+#~ "Desktop Files Editor lists every app of your Linux launcher and lets you "
+#~ "edit its .desktop file in a clean interface."
+#~ msgstr ""
+#~ "Desktop Files Editor liste toutes les applications de votre lanceur Linux "
+#~ "et permet de modifier leur fichier .desktop dans une interface épurée."
+
+#~ msgid "Delete applications"
+#~ msgstr "Supprimer des applications"
+
+#~ msgid ""
+#~ "With Desktop Files Editor you can see, edit, add or remove your .desktop "
+#~ "files."
+#~ msgstr ""
+#~ "Avec Desktop Files Editor vous pouvez voir, modifier, ajouter ou retirer "
+#~ "vos fichiers .desktop."
+
 #~ msgid "Is hidden"
 #~ msgstr "Est caché"
 
@@ -208,8 +301,8 @@ msgstr "Nouvelle app"
 #~ msgid "Not Implemented yet"
 #~ msgstr "Pas encore implémenté"
 
-#~ msgid "Shortcuts"
-#~ msgstr "Raccourcis"
-
 #~ msgid "Desktop-files-editor"
 #~ msgstr "Desktop Files Editor"
+
+#~ msgid "Shortcuts"
+#~ msgstr "Raccourcis"

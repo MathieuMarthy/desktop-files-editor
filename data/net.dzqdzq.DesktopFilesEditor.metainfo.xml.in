@@ -7,8 +7,37 @@
   <name translate="no">Desktop Files Editor</name>
   <summary>Manage your .desktop files</summary>
   <description>
-    <p>With Desktop Files Editor you can see, edit, add or remove your .desktop files.</p>
+    <p>Every application in your launcher is described by a .desktop file. Desktop Files Editor gathers them in one list, so you can change them without searching through folders or editing text files by hand.</p>
+    <p>Your user, system and Flatpak applications are all listed. System files are never modified: when you change one, a copy is saved in your personal folder, and you can restore the original at any time.</p>
+    <p>Features:</p>
+    <ul>
+      <li>Browse and search all your applications</li>
+      <li>Edit the name, icon, comment and command of an application</li>
+      <li>Hide applications from your launcher, and show them again</li>
+      <li>Create new applications</li>
+      <li>Delete your own applications or restore the original ones, with undo</li>
+      <li>Copy the path of a .desktop file</li>
+      <li>Work faster with keyboard shortcuts</li>
+    </ul>
   </description>
+
+  <screenshots>
+    <screenshot type="default">
+      <image>https://raw.githubusercontent.com/MathieuMarthy/desktop-files-editor/main/assets/app-screenshot-light.png</image>
+      <caption>Editing an application</caption>
+    </screenshot>
+    <screenshot>
+      <image>https://raw.githubusercontent.com/MathieuMarthy/desktop-files-editor/main/assets/app-screenshot-dark.png</image>
+      <caption>Dark style</caption>
+    </screenshot>
+  </screenshots>
+
+  <keywords>
+    <keyword>desktop</keyword>
+    <keyword>launcher</keyword>
+    <keyword>shortcut</keyword>
+    <keyword>editor</keyword>
+  </keywords>
 
   <developer id="net.dzqdzq">
     <name translate="no">Mathieu Marthy</name>
@@ -23,14 +52,17 @@
   <launchable type="desktop-id">net.dzqdzq.DesktopFilesEditor.desktop</launchable>
   <content_rating type="oars-1.1" />
 
-  <!-- Applications should set a brand color in both light and dark variants like so -->
   <branding>
-    <color type="primary" scheme_preference="light">#ff00ff</color>
-    <color type="primary" scheme_preference="dark">#993d3d</color>
+    <color type="primary" scheme_preference="light">#99c1f1</color>
+    <color type="primary" scheme_preference="dark">#1a5fb4</color>
   </branding>
 
   <releases>
-    <release version="0.1.0" date="2026-10-09" />
+    <release version="0.1.0" date="2026-10-09">
+      <description>
+        <p>First release.</p>
+      </description>
+    </release>
   </releases>
 
 </component>
