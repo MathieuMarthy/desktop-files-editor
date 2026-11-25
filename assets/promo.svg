@@ -32,9 +32,9 @@
   <rect width="1280" height="640" fill="url(#dots)" />
 
   <!-- Screenshots: dark behind, light in front, both bleeding off the edges -->
-  <image xlink:href="app-screenshot-dark.png" x="720" y="48" width="600" height="497"
+  <image xlink:href="app-screenshot-dark.png" x="720" y="28" width="600" height="447"
     filter="url(#shadow)" />
-  <image xlink:href="app-screenshot-light.png" x="590" y="150" width="640" height="530"
+  <image xlink:href="app-screenshot-light.png" x="590" y="100" width="640" height="476"
     filter="url(#shadow)" />
 
   <!-- Left column -->
@@ -44,7 +44,7 @@
     <tspan x="72" y="360" fill="#6b4fd8">Editor</tspan>
   </text>
   <text font-family="Adwaita Sans" font-size="24" fill="#4a4660">
-    <tspan x="72" y="418">Browse, edit and hide the apps</tspan>
+    <tspan x="72" y="418">Browse, add, edit, delete and hide the apps</tspan>
     <tspan x="72" y="450">of your Linux launcher, in a few clicks.</tspan>
   </text>
 
